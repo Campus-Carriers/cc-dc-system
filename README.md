@@ -1,2 +1,2 @@
 # cc-dc-system
-Campus-Carriers Order Handling Discord Bot System
+Campus-Carriers order handling Discord Bot System
