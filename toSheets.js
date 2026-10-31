@@ -2,7 +2,7 @@
 ////     SEND INFO TO SHEETS     ////
 /////////////////////////////////////
 // Ensure you are using Node.js v18 or higher
-const url = 'https://script.google.com/macros/s/AKfycbxhl8Vs1USHZJG-L13fNAVOQr_iJ2l9zOtb8qNrd9DH3cA47anDBbEi33I73l5Do7X5/exec';
+const url = 'https://script.google.com/macros/s/AKfycbwR0niL0szbew1Yu_d0ivwHb-nHyl5CQSwZMVCwGLoYt7WuoVAAb_WvNEr5JjDrtdk9QA/exec';
 
 export async function toSheets(payload) {
   try {
