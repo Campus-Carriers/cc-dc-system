@@ -17,6 +17,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     var payload;
     
     const interactions = {
+        "assignment" : () => {},
         "dispatch" : {
             "dispatched" : async () => {},
             "undo" : async () => {},
@@ -26,11 +27,8 @@ export function interactions(notifType, buttonId, orderId, interaction) {
             "confirm" : async () => {},
             "undo" : async () => {},
         },
-        "price" : {
-            "orderPrice" : async () => {},
-            "undo" : async () => {},
-        },
-        "orderPriceModal" : async () => {},
+        "orderPrice" : async () => {},
+        "surcharge" : () => {},
         "arrived" : {
             "arrived" : async () => {},
             "confirm" : async () => {},
@@ -41,6 +39,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
             "confirm" : async () => {},
             "undo" : async () => {},
         },
+        "remarks" : () => {},
     };
 
     if (buttonId !== "none") {
