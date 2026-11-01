@@ -1,7 +1,7 @@
 //////////////////////////////////////
 //// COMMANDS Handle Prompts Sent ////
 //////////////////////////////////////
-import { sendMessage } from './sendMessage.js';
+import { sendMessage } from './prompt commands/sendMessage.js';
 
 export function commands(channel, res, orderId, notifType) {
     var message;
