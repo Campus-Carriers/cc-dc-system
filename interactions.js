@@ -37,14 +37,14 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                     content: `✅ Accepted by ${carrier}`
                 });
 
-                // Create Private Thread with Carrier and EBs
+                /*// Create Private Thread with Carrier and EBs
                 const orderThread = await interaction.channel.threads.create({
                                     name: `Order ${orderId} - ${carrier.username}`,
                                     type: ChannelType.PrivateThread,
                                     });
                 await orderThread.send({
                     content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...`,
-                });//var userMessage =
+                });//var userMessage =*/
 
                 // Send Timestamp to Apps Script, Trigger Dispatch
                 payload = {
