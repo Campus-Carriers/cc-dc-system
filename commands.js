@@ -10,15 +10,14 @@ export function commands(channel, res, orderId, notifType) {
     var buttons;
     const commands = {
         "newOrder" : () => {
-            var message = "new order";
-            var finColor = color;
-            var title = "New Order";
-            var buttons = [
+            message = "new order";
+            title = "New Order";
+            buttons = [
                 // Id, Label, Style, Disabled
                 ["new_accept","Accept","Success",false],
                 ["new_reject","Reject","Secondary",true]
             ];
-            sendMessage(channel, res, title, message, finColor, buttons);
+            sendMessage(channel, res, title, message, color, buttons);
         },
         "update_dispatched" : () => {},
         "update_boughtOrDone" : () => {},
