@@ -29,7 +29,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
 
                 // Disable Button/s
                 // TODO: make limiter
-                await message.edit({
+                /*await message.edit({
                 components: newButtons(message, [0,1]),
                 });
 
@@ -37,7 +37,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                     content: `✅ Accepted by ${carrier}`
                 });
 
-                /*// Create Private Thread with Carrier and EBs
+                // Create Private Thread with Carrier and EBs
                 const orderThread = await interaction.channel.threads.create({
                                     name: `Order ${orderId} - ${carrier.username}`,
                                     type: ChannelType.PrivateThread,
