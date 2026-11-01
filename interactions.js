@@ -13,11 +13,58 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     const message = interaction.message;
     // Get the Channel to Send the Prompts to (should specify thread also eventually)
     const channel = interaction.channelId;
+    // Get Timestamp of Interaction
+    var timeNow = Math.floor(Date.now() / 1000); // Current Timestamp in Seconds
+    // Get Carrier
+    const carrier = carrier;
     var timeOut;
     var payload;
     
     const interactions = {
-        "assignment" : () => {},
+        "new" : {
+            "accept" : async () => {
+                // Send Interaction Notif
+                console.log(`Carrier ${carrier} is on the way`);
+                await interaction.editReply("You have accepted the order");
+
+                // Disable Button/s
+                // TODO: make limiter
+                await message.edit({
+                components: newButtons(message, [0,1]),
+                });
+
+                await interaction.followUp({
+                    content: `✅ Accepted by ${carrier}`
+                });
+
+                // Create Private Thread with Carrier and EBs
+                const orderThread = await interaction.channel.threads.create({
+                                    name: `Order ${orderId} - ${carrier.username}`,
+                                    type: ChannelType.PrivateThread,
+                                    });
+                var userMessage = await orderThread.send({
+                    content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...`,
+                });
+
+                // Send Timestamp to Apps Script, Trigger Dispatch
+                payload = {
+                    action: notifType,
+                    data: {
+                        orderId: orderId,
+                        timestamp: timeNow,
+                        carrier: carrier,
+                    }
+                };
+                toSheets(payload);
+            },
+            "reject" : async () => {
+                console.log(`❌ Rejected by ${carrier.username}`);
+                
+                // TODO: make limiter
+
+                await interaction.editReply("You have rejected the order");
+            },
+        },
         "dispatch" : {
             "dispatched" : async () => {},
             "undo" : async () => {},
