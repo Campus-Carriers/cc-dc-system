@@ -57,7 +57,7 @@ app.post("/trigger", async (req, res) => {
       notifType,
       channelId,
       orderId,
-      color,
+      info,
     } = req.body;
 
     // Log Info Received
@@ -86,7 +86,7 @@ app.post("/trigger", async (req, res) => {
 
     console.log("erm");
 ////// SEND PROMPT - based on trigger notif type
-    var action = commands(channel, res, orderId, notifType);
+    var action = commands(channel, res, orderId, notifType, info);
     action();
   
   } catch (error) {

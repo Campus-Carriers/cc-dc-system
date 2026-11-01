@@ -3,15 +3,15 @@
 //////////////////////////////////////
 import { sendMessage } from './prompt commands/sendMessage.js';
 
-export function commands(channel, res, orderId, notifType) {
+export function commands(channel, res, orderId, notifType, info) {
     var message;
     var color = "#5865F2";
     var title;
     var buttons;
     const commands = {
         "newOrder" : () => {
-            message = "new order";
-            title = "New Order";
+            message = info.body;
+            title = info.subject;
             buttons = [
                 // Id, Label, Style, Disabled
                 ["new_accept","Accept","Success",false],
