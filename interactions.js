@@ -16,7 +16,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     // Get Timestamp of Interaction
     var timeNow = Math.floor(Date.now() / 1000); // Current Timestamp in Seconds
     // Get Carrier
-    const carrier = carrier;
+    const carrier = interaction.user;
     var timeOut;
     var payload;
     
