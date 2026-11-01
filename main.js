@@ -2,7 +2,7 @@
 ////      MAIN WORKFLOW      ////
 /////////////////////////////////
 import 'dotenv/config';
-import { commands } from './prompt commands/commands.js';
+import { commands } from './commands.js';
 import { interactions } from './interactions.js';
 import express from 'express';
 import {
