@@ -22,14 +22,14 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     
     const interactions = {
         "new" : {
-            "accept" : async () => {
+            /*"accept" : async () => {
                 // Send Interaction Notif
                 console.log(`Carrier ${carrier} is on the way`);
                 await interaction.editReply("You have accepted the order");
 
                 // Disable Button/s
                 // TODO: make limiter
-                /*await message.edit({
+                await message.edit({
                 components: newButtons(message, [0,1]),
                 });
 
@@ -44,7 +44,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                                     });
                 await orderThread.send({
                     content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...`,
-                });//var userMessage =*/
+                });//var userMessage =
 
                 // Send Timestamp to Apps Script, Trigger Dispatch
                 payload = {
@@ -63,7 +63,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                 // TODO: make limiter
 
                 await interaction.editReply("You have rejected the order");
-            },
+            },*/
         },
         "dispatch" : {
             "dispatched" : async () => {},
