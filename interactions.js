@@ -22,7 +22,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     
     const interactions = {
         "new" : {
-            /*"accept" : async () => {
+            "accept" : async () => {
                 // Send Interaction Notif
                 console.log(`Carrier ${carrier} is on the way`);
                 await interaction.editReply("You have accepted the order");
@@ -63,7 +63,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                 // TODO: make limiter
 
                 await interaction.editReply("You have rejected the order");
-            },*/
+            },/**/
         },
         "dispatch" : {
             "dispatched" : async () => {},
