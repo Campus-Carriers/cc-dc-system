@@ -17,7 +17,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     var payload;
     
     const interactions = {
-        "assignment" : () => {},
+        "assignment" : {},
         "dispatch" : {
             "dispatched" : async () => {},
             "undo" : async () => {},
