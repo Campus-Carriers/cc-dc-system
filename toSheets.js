@@ -2,7 +2,7 @@
 ////     SEND INFO TO SHEETS     ////
 /////////////////////////////////////
 // Ensure you are using Node.js v18 or higher
-const normUrl = 'https://script.google.com/macros/s/AKfycbxR-5YD_qPM-joVrpS5KgwgjY0rQhgYeTGmB8F98aD-TDyGRSReVTRwqoRdjZRRf15Hag/exec';
+const normUrl = 'https://script.google.com/macros/s/AKfycbyIXGnUMveDE5JxHoMHkLIw1Fnny-4wh_1h2C6oM9nAcpH-TwOYyMTIhP3UhjRbJEKY0g/exec';
 const uaapUrl = 'https://script.google.com/macros/s/AKfycby7zXD-XAFDrT9B73tQrguRiJJ8zs4MvVe8wgpdysneD0FXnPDorSA5xYlPd7dmcPqP/exec';
 
 export async function toSheets(payload) {
@@ -11,7 +11,7 @@ export async function toSheets(payload) {
 
   if (orderId.includes('uaap')) { url = uaapUrl; }
   else { url = normUrl; }
-  
+
   try {
     const response = await fetch(url, {
       method: 'POST',
