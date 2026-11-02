@@ -23,8 +23,56 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     const interactions = {
         "assignment" : {},
         "dispatch" : {
-            "dispatched" : async () => {},
-            "undo" : async () => {},
+            "dispatched" : async () => {
+                // Send Interaction Notif
+                await interaction.editReply({ 
+                    content: `Errand ✅ Accepted by ${interaction.user}` 
+                });
+                
+                console.log("pre clear");
+                // Clear timeOut
+                if (timeOut) {
+                    clearTimeout(timeOut);
+                    console.log("time cleared");
+                }
+
+                // Disable Dispatched Button
+                await message.edit({
+                    components: newButtons(message, [0]),
+                });
+
+                // Wait 15 seconds before disabling undo
+                timeOut = await setTimeout(15000);
+                message.edit({
+                    components: newButtons(message, [0,1]),
+                });
+
+                // Edit Dispatch and Raw Sheets
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: [
+                        {
+                            timestamp: timeNow,
+                            carrieer: carrier,
+                            info: {},
+                        }
+                    ]
+                };
+                toSheets(payload);
+            },
+            "undo" : async () => {
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [1]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Carrier Dispatch ❌ Undone by ${interaction.user}`
+                });
+            },
         },
         "bought/done" : {
             "done" : async () => {},
