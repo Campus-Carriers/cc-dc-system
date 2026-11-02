@@ -188,6 +188,6 @@ try {
   console.error("Discord request failed:", error.name, error.message);
 }
 
-/*client.login(process.env.DISCORD_TOKEN)
+client.login(process.env.DISCORD_TOKEN)
   .then(() => console.log("Discord login completed"))
-  .catch((error) => console.error("Discord login failed:", error));*/
+  .catch((error) => console.error("Discord login failed:", error));/**/
