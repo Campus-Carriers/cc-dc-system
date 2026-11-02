@@ -7,7 +7,7 @@ import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
 import { ChannelType } from 'discord.js';
 
-export function interactions(notifType, buttonId, orderId, interaction) {
+export function interactions(notifType, buttonId, orderId, interaction, threadId) {
     // Get the Message Interacted With
     const message = interaction.message;
     // Get the Channel to Send the Prompts to (should specify thread also eventually)
@@ -99,6 +99,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                         {
                             timestamp: timeNow,
                             carrieer: carrier,
+                            threadId: threadId,
                             info: {},
                         }
                     ]

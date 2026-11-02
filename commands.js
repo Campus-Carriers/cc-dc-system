@@ -14,20 +14,18 @@ export function commands(channel, res, orderId, notifType, info) {
             title = info.subject;
             buttons = [
                 // Id, Label, Style, Disabled
-                [`${orderId}_new_accept`,"Accept","Success",false],
-                [`${orderId}_new_reject`,"Reject","Secondary",true]
+                [`${orderId}_new_accept_${channel}`,"Accept","Success",false],
+                [`${orderId}_new_reject_${channel}`,"Reject","Secondary",true]
             ];
             sendMessage(channel, res, title, message, color, buttons);/**/
         },
-        "update_dispatched" : () => {},
-        "newOrder" : () => {},
         "update_dispatched" : () => {
             message = "Press the button below once you have left to pick-up the order:";
             title = "Order Update: Dispatch";
             buttons = [
                 // Id, Label, Style, Disabled
-                [`dispatch_dispatched_${orderId}`,"Carrier Dispatched","Success",false],
-                [`dispatch_undo_${orderId}`,"Undo","Secondary",true]
+                [`${orderId}_dispatch_dispatched_${channel}`,"Carrier Dispatched","Success",false],
+                [`${orderId}_dispatch_undo_${channel}`,"Undo","Secondary",true]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },

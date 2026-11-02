@@ -9,6 +9,7 @@ import {
   Client,
   GatewayIntentBits,
 } from 'discord.js';
+import { threadId } from 'node:worker_threads';
 
 const app = express();
 
@@ -112,15 +113,17 @@ client.on("interactionCreate", async (interaction) => {
   );
 
   try {
-    const [orderId, notifType, ...buttonIdPart] = interaction.customId.split("_");
-    const buttonId = buttonIdPart || "none";
+    const custId = interaction.customId.split("_");
+    const [orderId, notifType] = custId[0,1];
+    const buttonId = custId.length == 4 ? custId[2] : "none";
+    const threadId = custId.length == 4 ? custId[2] : custId[3];
 
     // Acknowledge Button Click
     if (notifType !== "price") { await interaction.deferReply(); }
 
 ////// ACT ON BUTTON CLICK - based on notif type
     console.log(`${notifType}+${buttonId}`);
-    const interact = interactions(notifType, buttonId, orderId, interaction);
+    const interact = interactions(notifType, buttonId, orderId, interaction, threadId);
     await interact();
     console.log(`${notifType}+${buttonId}`);
   } catch (error) {
