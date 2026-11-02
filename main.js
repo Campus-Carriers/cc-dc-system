@@ -172,6 +172,9 @@ client.on("shardError", (error, id) =>
 );
 client.on("error", (error) => console.error("Discord client error:", error));
 
+client.on("debug", (message) => console.log("[Discord debug]", message));
+client.on("warn", (message) => console.warn("[Discord warn]", message));
+
 client.login(process.env.DISCORD_TOKEN)
-  .then(() => console.log("Discord login call completed"))
+  .then(() => console.log("Discord login completed"))
   .catch((error) => console.error("Discord login failed:", error));
