@@ -98,16 +98,3 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     }
     else { console.log("none"); return(interactions[notifType]); }
 }
-
-function milToDateTime(ms) {
-    const timestamp = new Date(ms);
-    const conv = timestamp.toISOString();
-
-    return {
-        year: conv[0,3],
-        month: conv[5,6],
-        day: conv[8,9],
-        hour: conv[11,12],
-        minute: conv[14,15],
-    };
-}
