@@ -6,7 +6,7 @@ const normUrl = 'https://script.google.com/macros/s/AKfycbz39KYx1KXWl04l-vsjKoKz
 const uaapUrl = 'https://script.google.com/macros/s/AKfycby7zXD-XAFDrT9B73tQrguRiJJ8zs4MvVe8wgpdysneD0FXnPDorSA5xYlPd7dmcPqP/exec';
 
 export async function toSheets(payload) {
-  const orderId = payload.data[0].orderId;
+  const orderId = payload.data.orderId;
   var url;
 
   if (orderId.includes('uaap')) { url = uaapUrl; }
