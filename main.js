@@ -180,11 +180,14 @@ try {
     headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
     signal: AbortSignal.timeout(15000),
   });
-  console.log("Discord gateway discovery status:", response.status);
+
+  console.log("Discord status:", response.status);
+  console.log("Retry-After:", response.headers.get("retry-after"));
+  console.log("Discord response:", await response.text());
 } catch (error) {
-  console.error("Discord gateway discovery failed:", error.name, error.message);
+  console.error("Discord request failed:", error.name, error.message);
 }
 
-client.login(process.env.DISCORD_TOKEN)
+/*client.login(process.env.DISCORD_TOKEN)
   .then(() => console.log("Discord login completed"))
-  .catch((error) => console.error("Discord login failed:", error));
+  .catch((error) => console.error("Discord login failed:", error));*/
