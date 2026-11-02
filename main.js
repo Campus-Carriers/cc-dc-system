@@ -117,6 +117,7 @@ client.on("interactionCreate", async (interaction) => {
     const [orderId, notifType] = custId[0,1];
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[2] : custId[3];
+    console.log(custId);
 
     // Acknowledge Button Click
     if (notifType !== "price") { await interaction.deferReply(); }
