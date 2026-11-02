@@ -19,7 +19,8 @@ export function commands(channel, res, orderId, notifType, info) {
             ];
             sendMessage(channel, res, title, message, color, buttons);/**/
         },
-        "update_dispatched" : () => {},
+        "update_dispatched" : () => { 
+    console.log("notifType"); },
         "update_boughtOrDone" : () => {},
         "orderPrice" : () => {},
         "surcharge" : () => {},
