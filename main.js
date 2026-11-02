@@ -72,14 +72,8 @@ app.post("/trigger", async (req, res) => {
     }
     console.log("chnl check");
 
-    let channel;
-    // Fetch Channel
-   try {
-    //setTimeout(15000);
-    channel = await client.channels.fetch(channelId);
-   } catch (error) {
-    console.log(`Error: ${error}`);
-   }
+    console.log(client.isReady());
+    let channel = await client.channels.fetch(channelId);
 
     // Handle Channel Validity
     if (!channel || !channel.isTextBased()) {
