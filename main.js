@@ -72,8 +72,8 @@ app.post("/trigger", async (req, res) => {
     }
     console.log("chnl check");
 
-    // Fetch Channel
-    const channel = await client.channels.fetch(channelId);
+    console.log(client.isReady());
+    let channel = await client.channels.fetch(channelId);
 
     // Handle Channel Validity
     if (!channel || !channel.isTextBased()) {
@@ -149,4 +149,41 @@ app.listen(PORT, "0.0.0.0", () => {
 });
 
 // -----Login-----
-client.login(process.env.DISCORD_TOKEN);
+/*client.login(process.env.DISCORD_TOKEN).catch((error) => { console.error("Discord login error:", error); });
+
+client.on("error", (error) => {
+  console.error("Discord client error:", error);
+});*/
+console.log("Starting Discord login", {
+  tokenConfigured: Boolean(process.env.DISCORD_TOKEN),
+});
+
+client.on("shardReady", (id) => console.log(`Discord shard ${id} ready`));
+client.on("shardReconnecting", (id) => console.warn(`Discord shard ${id} reconnecting`));
+client.on("shardDisconnect", (event, id) =>
+  console.error(`Discord shard ${id} disconnected`, event.code, event.reason)
+);
+client.on("shardError", (error, id) =>
+  console.error(`Discord shard ${id} error`, error)
+);
+client.on("error", (error) => console.error("Discord client error:", error));
+
+client.on("debug", (message) => console.log("[Discord debug]", message));
+client.on("warn", (message) => console.warn("[Discord warn]", message));
+
+try {
+  const response = await fetch("https://discord.com/api/v10/gateway/bot", {
+    headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
+    signal: AbortSignal.timeout(15000),
+  });
+
+  console.log("Discord status:", response.status);
+  console.log("Retry-After:", response.headers.get("retry-after"));
+  console.log("Discord response:", await response.text());
+} catch (error) {
+  console.error("Discord request failed:", error.name, error.message);
+}
+
+client.login(process.env.DISCORD_TOKEN)
+  .then(() => console.log("Discord login completed"))
+  .catch((error) => console.error("Discord login failed:", error));/**/
