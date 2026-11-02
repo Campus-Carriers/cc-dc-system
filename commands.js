@@ -9,7 +9,7 @@ export function commands(channel, res, orderId, notifType, info) {
     var title;
     var buttons;
     const commands = {
-        "assignment" : () => {},
+        "newOrder" : () => {},
         "update_dispatched" : () => {
             message = "Press the button below once you have left to pick-up the order:";
             title = "Order Update: Dispatch";
