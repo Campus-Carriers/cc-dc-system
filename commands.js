@@ -3,7 +3,7 @@
 //////////////////////////////////////
 import { sendMessage } from './prompt commands/sendMessage.js';
 
-export function commands(channel, res, orderId, notifType) {
+export function commands(channel, res, orderId, notifType, info) {
     var message;
     var color = "#5865F2";
     var title;

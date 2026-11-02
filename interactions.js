@@ -13,6 +13,10 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     const message = interaction.message;
     // Get the Channel to Send the Prompts to (should specify thread also eventually)
     const channel = interaction.channelId;
+    // Get Timestamp of Interaction
+    var timeNow = Math.floor(Date.now() / 1000); // Current Timestamp in Seconds
+    // Get Carrier
+    const carrier = interaction.user;
     var timeOut;
     var payload;
     
