@@ -12,7 +12,7 @@ export async function toSheets(payload) {
 
   if (orderId.includes('uaap')) { url = uaapUrl; }
   else { url = normUrl; }
-  
+
   try {
     const response = await fetch(url, {
       method: 'POST',
