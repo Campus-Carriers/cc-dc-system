@@ -153,8 +153,25 @@ app.listen(PORT, "0.0.0.0", () => {
 });
 
 // -----Login-----
-client.login(process.env.DISCORD_TOKEN).catch((error) => { console.error("Discord login error:", error); });
+/*client.login(process.env.DISCORD_TOKEN).catch((error) => { console.error("Discord login error:", error); });
 
 client.on("error", (error) => {
   console.error("Discord client error:", error);
+});*/
+console.log("Starting Discord login", {
+  tokenConfigured: Boolean(process.env.DISCORD_TOKEN),
 });
+
+client.on("shardReady", (id) => console.log(`Discord shard ${id} ready`));
+client.on("shardReconnecting", (id) => console.warn(`Discord shard ${id} reconnecting`));
+client.on("shardDisconnect", (event, id) =>
+  console.error(`Discord shard ${id} disconnected`, event.code, event.reason)
+);
+client.on("shardError", (error, id) =>
+  console.error(`Discord shard ${id} error`, error)
+);
+client.on("error", (error) => console.error("Discord client error:", error));
+
+client.login(process.env.DISCORD_TOKEN)
+  .then(() => console.log("Discord login call completed"))
+  .catch((error) => console.error("Discord login failed:", error));
