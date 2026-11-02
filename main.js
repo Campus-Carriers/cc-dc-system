@@ -72,10 +72,11 @@ app.post("/trigger", async (req, res) => {
     }
     console.log("chnl check");
 
+    let channel;
     // Fetch Channel
    try {
     //setTimeout(15000);
-    const channel = await client.channels.fetch(channelId);
+    channel = await client.channels.fetch(channelId);
    } catch (error) {
     console.log(`Error: ${error}`);
    }
