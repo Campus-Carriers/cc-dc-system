@@ -159,4 +159,8 @@ app.listen(PORT, "0.0.0.0", () => {
 });
 
 // -----Login-----
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN).catch((error) => { console.error("Discord login error:", error); });
+
+client.on("error", (error) => {
+  console.error("Discord client error:", error);
+});
