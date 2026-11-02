@@ -2,8 +2,6 @@
 //// INTERACTIONS Handle Button/Etc Interactions ////
 /////////////////////////////////////////////////////
 import { newButtons } from './prompt commands/newButtons.js';
-import { textPrompt } from './prompt commands/textPrompt.js';
-import { imagePrompt } from './prompt commands/imagePrompt.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
