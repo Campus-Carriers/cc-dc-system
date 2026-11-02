@@ -49,10 +49,11 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                 // Send Timestamp to Apps Script, Trigger Dispatch
                 payload = {
                     action: notifType,
+                    orderId: orderId,
                     data: {
-                        orderId: orderId,
                         timestamp: timeNow,
                         carrier: carrier,
+                        info: {},
                     }
                 };
                 toSheets(payload);

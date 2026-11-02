@@ -2,7 +2,7 @@
 ////     SEND INFO TO SHEETS     ////
 /////////////////////////////////////
 // Ensure you are using Node.js v18 or higher
-const normUrl = 'https://script.google.com/macros/s/AKfycbxR-5YD_qPM-joVrpS5KgwgjY0rQhgYeTGmB8F98aD-TDyGRSReVTRwqoRdjZRRf15Hag/exec';
+const normUrl = 'https://script.google.com/macros/s/AKfycbz39KYx1KXWl04l-vsjKoKzEycnENxVhBNRpWdz7sKz5VaifWkcL8fMlKhj9LQV1t1dXQ/exec';
 const uaapUrl = 'https://script.google.com/macros/s/AKfycby7zXD-XAFDrT9B73tQrguRiJJ8zs4MvVe8wgpdysneD0FXnPDorSA5xYlPd7dmcPqP/exec';
 
 export async function toSheets(payload) {
