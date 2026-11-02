@@ -175,6 +175,16 @@ client.on("error", (error) => console.error("Discord client error:", error));
 client.on("debug", (message) => console.log("[Discord debug]", message));
 client.on("warn", (message) => console.warn("[Discord warn]", message));
 
+try {
+  const response = await fetch("https://discord.com/api/v10/gateway/bot", {
+    headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
+    signal: AbortSignal.timeout(15000),
+  });
+  console.log("Discord gateway discovery status:", response.status);
+} catch (error) {
+  console.error("Discord gateway discovery failed:", error.name, error.message);
+}
+
 client.login(process.env.DISCORD_TOKEN)
   .then(() => console.log("Discord login completed"))
   .catch((error) => console.error("Discord login failed:", error));
