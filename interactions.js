@@ -7,6 +7,7 @@ import { imagePrompt } from './prompt commands/imagePrompt.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
+import { ChannelType } from 'discord.js';
 
 export function interactions(notifType, buttonId, orderId, interaction) {
     // Get the Message Interacted With
@@ -49,14 +50,14 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                 // Send Timestamp to Apps Script, Trigger Dispatch
                 payload = {
                     action: notifType,
-                    orderId: orderId,
                     data: {
+                        orderId: orderId,
                         timestamp: timeNow,
                         carrier: carrier,
                         info: {},
                     }
                 };
-                toSheets(payload);
+                await toSheets(payload);
             },
             "reject" : async () => {
                 console.log(`❌ Rejected by ${carrier.username}`);

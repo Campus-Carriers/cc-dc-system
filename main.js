@@ -112,25 +112,21 @@ client.on("interactionCreate", async (interaction) => {
   );
 
   try {
-    var interactionId = interaction.customId.split("_");
-    var notifType = interactionId[0];
-    var buttonId = interactionId.length > 2 ? interactionId[1] : "none";
-    var orderId = interactionId.length > 2 ? interactionId[2] : interactionId[1];
+    const [orderId, notifType, ...buttonIdPart] = interaction.customId.split("_");
+    const buttonId = buttonIdPart || "none";
 
     // Acknowledge Button Click
     if (notifType !== "price") { await interaction.deferReply(); }
 
 ////// ACT ON BUTTON CLICK - based on notif type
-    console.log(interactionId[0] + "+" + interactionId[1]);
-    var interact = await interactions(notifType, buttonId, orderId, interaction);
+    console.log(`${notifType}+${buttonId}`);
+    const interact = interactions(notifType, buttonId, orderId, interaction);
     await interact();
-    console.log(interactionId[0] + "+" + interactionId[1]);
-
+    console.log(`${notifType}+${buttonId}`);
   } catch (error) {
     console.error("Button interaction error:", error);
 
-    // Try to respond if the interaction hasn't been acknowledged
-    if (!interaction.deferred && !interaction.replied) {
+    if (interaction.deferred || interaction.replied) {
       await interaction.reply({
         content: "❌ Something went wrong.",
         ephemeral: true,
