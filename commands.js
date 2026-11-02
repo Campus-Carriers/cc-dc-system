@@ -10,14 +10,7 @@ export function commands(channel, res, orderId, notifType, info) {
     var buttons;
     const commands = {
         "newOrder" : () => {
-            message = `Customer Name: ${info.body.customerName}
-Dispatch Time: ${info.body.dispatchTime}
-Peak Hour Surcharge: ${info.body.isPeak ? "Yes (+10)" : "No"}
-Location: ${info.body.location}
-Store: ${info.body.store}
-Order: ${info.body.order}
-Special Request: ${info.body.specialReq}
-Mode of Payment: ${info.body.mop}`;
+            message = info.body;
             title = info.subject;
             buttons = [
                 // Id, Label, Style, Disabled
