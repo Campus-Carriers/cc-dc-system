@@ -50,10 +50,10 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 payload = {
                     action: notifType,
                     orderId: orderId,
-                    threadId: orderThread.id,
                     data: {
                         timestamp: timeNow,
                         carrier: carrier.username,
+                        threadId: orderThread.id,
                         info: {},
                     }
                 };
