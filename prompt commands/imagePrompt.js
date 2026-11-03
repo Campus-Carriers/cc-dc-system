@@ -18,7 +18,7 @@ export async function imagePrompt(user, channel, picType) {
     );
 
     // Check for an image reply
-    const filter = (m) => m.author.id === user && m.attachments.size > 0;
+    const filter = (m) => m.author.id === user.id && m.attachments.size > 0;
 
     try {
         const collected = await channel.awaitMessages({
