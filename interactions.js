@@ -5,8 +5,9 @@ import { newButtons } from './prompt commands/newButtons.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
+import { ChannelType } from 'discord.js';
 
-export function interactions(notifType, buttonId, orderId, interaction) {
+export function interactions(notifType, buttonId, orderId, interaction, threadId) {
     // Get the Message Interacted With
     const message = interaction.message;
     // Get the Channel to Send the Prompts to (should specify thread also eventually)
@@ -19,12 +20,57 @@ export function interactions(notifType, buttonId, orderId, interaction) {
     var payload;
     
     const interactions = {
-        "assignment" : {},
+        "new" : {
+            "accept" : async () => {
+                // Send Interaction Notif
+                console.log(`Carrier ${carrier} is on the way`);
+                await interaction.editReply("You have accepted the order");
+
+                // Disable Button/s
+                // TODO: make limiter
+                await message.edit({
+                components: newButtons(message, [0,1]),
+                });
+
+                await interaction.followUp({
+                    content: `Errand ✅ Accepted by ${carrier}`
+                });
+
+                // Create Private Thread with Carrier and EBs
+                const orderThread = await interaction.channel.threads.create({
+                                    name: `Order ${orderId} - ${carrier.username}`,
+                                    type: ChannelType.PrivateThread,
+                                    });
+                await orderThread.send({
+                    content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...`,
+                });//var userMessage =
+
+                // Send Timestamp to Apps Script, Trigger Dispatch
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    threadId: orderThread.id,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        info: {},
+                    }
+                };
+                await toSheets(payload);
+            },
+            "reject" : async () => {
+                console.log(`❌ Rejected by ${carrier.username}`);
+                
+                // TODO: make limiter
+
+                await interaction.editReply("You have rejected the order");
+            },/**/
+        },
         "dispatch" : {
             "dispatched" : async () => {
                 // Send Interaction Notif
                 await interaction.editReply({ 
-                    content: `Errand ✅ Accepted by ${interaction.user}` 
+                    content: `Carrier ${interaction.user} Dispatched ✅ for ${orderId} ` 
                 });
                 
                 console.log("pre clear");
@@ -53,6 +99,7 @@ export function interactions(notifType, buttonId, orderId, interaction) {
                         {
                             timestamp: timeNow,
                             carrieer: carrier,
+                            threadId: threadId,
                             info: {},
                         }
                     ]
