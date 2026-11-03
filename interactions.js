@@ -144,7 +144,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
                 
                 // Image Prompt
-                let imageProof = imagePrompt(interaction.user, channel, "n Errand Accomplishment");
+                let imageProof = imagePrompt(interaction.user, threadId, "n Errand Accomplishment");
 
                 // Send Info to Apps Script, Trigger Errand Done
                 payload = {
