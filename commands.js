@@ -8,6 +8,7 @@ export function commands(channel, res, orderId, notifType, info) {
     var color = "#5865F2";
     var title;
     var buttons;
+    const channelId = channel.id;
     const commands = {
         "newOrder" : () => {
             console.log(`channel: ${channel}`);
@@ -15,8 +16,8 @@ export function commands(channel, res, orderId, notifType, info) {
             title = info.subject;
             buttons = [
                 // Id, Label, Style, Disabled
-                [`${orderId}_new_accept_${channel}`,"Accept","Success",false],
-                [`${orderId}_new_reject_${channel}`,"Reject","Secondary",true]
+                [`${orderId}_new_accept_${channelId}`,"Accept","Success",false],
+                [`${orderId}_new_reject_${channelId}`,"Reject","Secondary",true]
             ];
             sendMessage(channel, res, title, message, color, buttons);/**/
         },
@@ -26,8 +27,8 @@ export function commands(channel, res, orderId, notifType, info) {
             title = "Order Update: Dispatch";
             buttons = [
                 // Id, Label, Style, Disabled
-                [`${orderId}_dispatch_dispatched_${channel}`,"Carrier Dispatched","Success",false],
-                [`${orderId}_dispatch_undo_${channel}`,"Undo","Secondary",true]
+                [`${orderId}_dispatch_dispatched_${channelId}`,"Carrier Dispatched","Success",false],
+                [`${orderId}_dispatch_undo_${channelId}`,"Undo","Secondary",true]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
@@ -37,9 +38,9 @@ export function commands(channel, res, orderId, notifType, info) {
             title = "Order Update: Errand Accomplished";
             buttons = [
                 // Id, Label, Style, Disabled
-                [`${orderId}_bought/done_done_${channel}`,"Errand Done","Success",false],
-                [`${orderId}_bought/done_confirm_${channel}`,"Confirm","Secondary",true],
-                [`${orderId}_bought/done_undo_${channel}`,"Undo","Secondary",true]
+                [`${orderId}_bought/done_done_${channelId}`,"Errand Done","Success",false],
+                [`${orderId}_bought/done_confirm_${channelId}`,"Confirm","Secondary",true],
+                [`${orderId}_bought/done_undo_${channelId}`,"Undo","Secondary",true]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
