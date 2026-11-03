@@ -98,7 +98,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     orderId: orderId,
                     data: {
                         timestamp: timeNow,
-                        carrier: carrier,
+                        carrier: carrier.username,
                         threadId: threadId,
                         info: {},
                     }
@@ -152,7 +152,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     orderId: orderId,
                     data: {
                         timestamp: timeNow,
-                        carrier: carrier,
+                        carrier: carrier.username,
                         threadId: threadId,
                         info: {
                             imageProof: imageProof.url || 'error',
