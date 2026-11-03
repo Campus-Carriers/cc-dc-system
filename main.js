@@ -114,9 +114,10 @@ client.on("interactionCreate", async (interaction) => {
 
   try {
     const custId = interaction.customId.split("_");
-    const [orderId, notifType] = custId[0,1];
+    const orderId = custId[0];
+    const notifType = custId[1];
     const buttonId = custId.length == 4 ? custId[2] : "none";
-    const threadId = custId.length == 4 ? custId[2] : custId[3];
+    const threadId = custId.length == 4 ? custId[3] : custId[2];
     console.log(custId, orderId, notifType, buttonId, threadId);
 
     // Acknowledge Button Click
