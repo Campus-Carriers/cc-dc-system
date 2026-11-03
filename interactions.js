@@ -33,7 +33,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
 
                 await interaction.followUp({
-                    content: `✅ Accepted by ${carrier}`
+                    content: `Errand ✅ Accepted by ${carrier}`
                 });
 
                 // Create Private Thread with Carrier and EBs
@@ -70,7 +70,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "dispatched" : async () => {
                 // Send Interaction Notif
                 await interaction.editReply({ 
-                    content: `Errand ✅ Accepted by ${interaction.user}` 
+                    content: `Carrier ${interaction.user} Dispatched ✅ for ${orderId} ` 
                 });
                 
                 console.log("pre clear");
