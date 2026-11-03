@@ -2,6 +2,7 @@
 //// INTERACTIONS Handle Button/Etc Interactions ////
 /////////////////////////////////////////////////////
 import { newButtons } from './prompt commands/newButtons.js';
+import { imagePrompt } from './prompt commands/imagePrompt.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
@@ -45,7 +46,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...`,
                 });//var userMessage =
 
-                // Send Timestamp to Apps Script, Trigger Dispatch
+                // Send Info to Apps Script, Trigger Dispatch
                 payload = {
                     action: notifType,
                     orderId: orderId,
@@ -91,18 +92,16 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     components: newButtons(message, [0,1]),
                 });
 
-                // Edit Dispatch and Raw Sheets
+                // Send Info to Apps Script, Trigger Errand Done
                 payload = {
                     action: notifType,
                     orderId: orderId,
-                    data: [
-                        {
-                            timestamp: timeNow,
-                            carrieer: carrier,
-                            threadId: threadId,
-                            info: {},
-                        }
-                    ]
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier,
+                        threadId: threadId,
+                        info: {},
+                    }
                 };
                 toSheets(payload);
             },
@@ -120,9 +119,60 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             },
         },
         "bought/done" : {
-            "done" : async () => {},
-            "confirm" : async () => {},
-            "undo" : async () => {},
+            "done" : async () => {
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Please Confirm [?] Errand Accomplishment, Carrier ${interaction.user}`
+                });
+                console.log(`done`);
+
+                // Disable Bought/Done Button
+                await message.edit({
+                components: newButtons(message, [0]),
+                });
+            },
+            "confirm" : async () => {
+                console.log(`done confirm`);
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Errand Accomplishment ✅ Confirmed by ${interaction.user}`
+                });
+                
+                // Image Prompt
+                let imageProof = imagePrompt(interaction.user, channel, "n Errand Accomplishment");
+
+                // Send Info to Apps Script, Trigger Errand Done
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier,
+                        threadId: threadId,
+                        info: {
+                            imageProof: imageProof.url || 'error',
+                        },
+                    }
+                };
+                toSheets(payload);
+            },
+            "undo" : async () => {
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [1,2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Errand Accomplishment ❌ Undone by ${interaction.user}`
+                });
+            },
         },
         "orderPrice" : async () => {},
         "surcharge" : () => {},

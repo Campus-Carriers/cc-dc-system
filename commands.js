@@ -29,7 +29,17 @@ export function commands(channel, res, orderId, notifType, info) {
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "update_boughtOrDone" : () => {},
+        "update_boughtOrDone" : () => {
+            message = "Errand done:";
+            title = "Order Update: Errand Accomplished";
+            buttons = [
+                // Id, Label, Style, Disabled
+                [`${orderId}_bought/done_done_${channel}`,"Errand Done","Success",false],
+                [`${orderId}_bought/done_confirm_${channel}`,"Confirm","Secondary",true],
+                [`${orderId}_bought/done_undo_${channel}`,"Undo","Secondary",true]
+            ];
+            sendMessage(channel, res, title, message, color, buttons);
+        },
         "orderPrice" : () => {},
         "surcharge" : () => {},
         "update_arrived" : () => {},
