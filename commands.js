@@ -10,6 +10,7 @@ export function commands(channel, res, orderId, notifType, info) {
     var buttons;
     const commands = {
         "newOrder" : () => {
+            console.log(`channel: ${channel}`);
             message = info.body;
             title = info.subject;
             buttons = [
@@ -20,6 +21,7 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);/**/
         },
         "update_dispatched" : () => {
+            console.log(`channel: ${channel}`);
             message = "Press the button below once you have left to pick-up the order:\n\n" + info.body;
             title = "Order Update: Dispatch";
             buttons = [
@@ -30,6 +32,7 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);
         },
         "update_boughtOrDone" : () => {
+            console.log(`channel: ${channel}`);
             message = "Errand done:";
             title = "Order Update: Errand Accomplished";
             buttons = [
