@@ -44,9 +44,18 @@ export function commands(channel, res, orderId, notifType, info) {
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "orderPrice" : () => {},
         "surcharge" : () => {},
-        "update_arrived" : () => {},
+        "update_arrived" : () => {
+            message = "Arrived:";
+            title = "Order Update: Arrived at Delivery Location";
+            buttons = [
+                // Id, Label, Style, Disabled
+                [`${orderId}_arrived_arrived_${channelId}`,"Arrived","Primary",false],
+                [`${orderId}_arrived_confirm_${channelId}`,"Confirm","Secondary",true],
+                [`${orderId}_arrived_undo_${channelId}`,"Undo","Secondary",true],
+            ];
+            sendMessage(channel, res, title, message, color, buttons);
+        },
         "update_delivered" : () => {},
         "remarks" : () => {},
     };

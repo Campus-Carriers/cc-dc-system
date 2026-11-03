@@ -177,9 +177,61 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
         "orderPrice" : async () => {},
         "surcharge" : () => {},
         "arrived" : {
-            "arrived" : async () => {},
-            "confirm" : async () => {},
-            "undo" : async () => {},
+            "arrived" : async () => {
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Please Confirm [?] Arrival, Carrier ${interaction.user}`
+                });
+                console.log(`arrived`);
+
+                // Disable Bought/Done Button
+                await message.edit({
+                    components: newButtons(message, [0]),
+                });
+            },
+            "confirm" : async () => {
+                console.log(`confirm`);
+
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Arrival ✅ Confirmed by ${interaction.user}`
+                });
+                
+                // Image Prompt
+                let imageProof = await imagePrompt(interaction.user, channel, " Delivery Location Arrival");
+                
+                // Send Info to Apps Script, Trigger Errand Done
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            imageProof: imageProof.url || 'error',
+                        },
+                    }
+                };
+                toSheets(payload);
+            },
+            "undo" : async () => {
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [1,2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Arrival ❌ Undone by ${interaction.user}`
+                });
+            },
         },
         "delivered" : {
             "delivered" : async () => {},
