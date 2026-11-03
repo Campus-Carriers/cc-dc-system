@@ -146,6 +146,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Image Prompt
                 let imageProof = await imagePrompt(interaction.user, channel, "n Errand Accomplishment");
 
+                // Errand/Order Price Input Modal
+                await textPrompt(interaction, `Enter Order/Errand Price: `);
+
                 // Send Info to Apps Script, Trigger Errand Done
                 payload = {
                     action: notifType,
@@ -165,17 +168,25 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
-                components: newButtons(message, [1,2]),
+                    components: newButtons(message, [1,2]),
                 });
 
                 // Send Interaction Notif
                 await interaction.editReply({
-                content: `Errand Accomplishment ❌ Undone by ${interaction.user}`
+                    content: `Errand Accomplishment ❌ Undone by ${interaction.user}`
                 });
             },
         },
-        "orderPrice" : async () => {},
-        "surcharge" : () => {},
+        "orderPriceModal" : async () => {
+            // Extract the value from the specific text input custom ID
+            const submittedText = interaction.fields.getTextInputValue('orderPriceInput');
+
+            // Send Interaction Notif
+            await interaction.editReply({
+                content: `Order Price ${submittedText} confirmed by ${interaction.user}`
+            });
+        },
+        "surcharge " : () => {},
         "arrived" : {
             "arrived" : async () => {},
             "confirm" : async () => {},
