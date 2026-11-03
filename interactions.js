@@ -12,7 +12,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     // Get the Message Interacted With
     const message = interaction.message;
     // Get the Channel to Send the Prompts to (should specify thread also eventually)
-    const channel = interaction.channelId;
+    const channel = interaction.channel;
     // Get Timestamp of Interaction
     var timeNow = Math.floor(Date.now() / 1000); // Current Timestamp in Seconds
     // Get Carrier
@@ -144,7 +144,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
                 
                 // Image Prompt
-                let imageProof = imagePrompt(interaction.user, threadId, "n Errand Accomplishment");
+                let imageProof = imagePrompt(interaction.user, channel, "n Errand Accomplishment");
 
                 // Send Info to Apps Script, Trigger Errand Done
                 payload = {
