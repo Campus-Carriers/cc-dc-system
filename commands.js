@@ -20,7 +20,7 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);/**/
         },
         "update_dispatched" : () => {
-            message = "Press the button below once you have left to pick-up the order:";
+            message = "Press the button below once you have left to pick-up the order:\n\n" + info.body;
             title = "Order Update: Dispatch";
             buttons = [
                 // Id, Label, Style, Disabled
