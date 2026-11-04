@@ -2,6 +2,7 @@ import {
   ModalBuilder, 
   TextInputBuilder, 
   TextInputStyle,
+  FileUploadBuilder,
   LabelBuilder,  
 } from 'discord.js';
 
