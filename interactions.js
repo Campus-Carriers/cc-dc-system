@@ -143,16 +143,35 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await interaction.editReply({
                     content: `Errand Accomplishment ✅ Confirmed by ${interaction.user}`
                 });
+
+                /*// Send Info to Apps Script, Trigger Errand Done
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {},
+                    }
+                };
+                toSheets(payload);*/
                 
                 // Image Prompt
-                let imageProof = await imagePrompt(interaction.user, channel, "n Errand Accomplishment");
+                let imageProof = await imagePrompt(orderId, interaction, notifType, "Order Bought/Errand Done");
+            },
+            "imagePromptModal" : async () => {
+                // Extract the value from the specific text input custom ID
+                const imageProof = interaction.fields.getUploadedFiles('imageInput');
 
-                // Errand/Order Price Input Modal
-                await textPrompt(interaction, `Enter Order/Errand Price: `);
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Image Proof ${imageProof.filename} submitted by ${interaction.user}`
+                });
 
                 // Send Info to Apps Script, Trigger Errand Done
                 payload = {
-                    action: notifType,
+                    action: 'bought/done',
                     orderId: orderId,
                     data: {
                         timestamp: timeNow,
@@ -164,6 +183,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     }
                 };
                 toSheets(payload);
+
+                // Errand/Order Price Input Modal
+                await textPrompt(interaction, `Enter Order/Errand Price: `);
             },
             "undo" : async () => {
                 console.log(`undo`);
