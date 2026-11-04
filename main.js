@@ -119,9 +119,9 @@ client.on("interactionCreate", async (interaction) => {
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
     console.log(custId, orderId, notifType, buttonId, threadId);
-
+    
     // Acknowledge Button Click
-    if (notifType !== "price") { await interaction.deferReply(); }
+    if (!interaction.isModalSubmit()) { await interaction.deferReply(); }
 
 ////// ACT ON BUTTON CLICK - based on notif type
     console.log(`${notifType}+${buttonId}`);
@@ -131,11 +131,17 @@ client.on("interactionCreate", async (interaction) => {
   } catch (error) {
     console.error("Button interaction error:", error);
 
-    if (interaction.deferred || interaction.replied) {
-      await interaction.reply({
-        content: "❌ Something went wrong.",
-        ephemeral: true,
-      });
+    const errorResponse = {
+      content: "❌ Something went wrong.",
+      ephemeral: true,
+    };
+
+    if (interaction.deferred) {
+      await interaction.editReply(errorResponse);
+    } else if (interaction.replied) {
+      await interaction.followUp(errorResponse);
+    } else {
+      await interaction.reply(errorResponse);
     }
   }
 });

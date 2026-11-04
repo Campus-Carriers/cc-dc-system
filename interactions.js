@@ -134,13 +134,14 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             },
             "confirm" : async () => {
                 console.log(`done confirm`);
+
+                // Image Prompt
+                await imagePrompt(orderId, interaction, notifType, "Order Bought/Errand Done");
+
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2]),
                 });
-                
-                // Image Prompt
-                let imageProof = await imagePrompt(orderId, interaction, notifType, "Order Bought/Errand Done");
 
                 // Send Interaction Notif
                 await channel.send(`Errand Accomplishment ✅ Confirmed by ${interaction.user}`);
@@ -162,6 +163,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Extract the value from the specific text input custom ID
                 const imageProof = interaction.fields.getUploadedFiles('imageInput');
 
+                // Open the price prompt before doing other work that may delay acknowledgement.
+                await textPrompt(interaction, `Enter Order/Errand Price: `, orderId, threadId);
+
                 // Send Interaction Notif
                 await channel.send(`Image Proof ${imageProof.filename} submitted by ${interaction.user}`);
 
@@ -179,9 +183,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     }
                 };
                 toSheets(payload);
-
-                // Errand/Order Price Input Modal
-                await textPrompt(interaction, `Enter Order/Errand Price: `);
             },
             "undo" : async () => {
                 console.log(`undo`);

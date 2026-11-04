@@ -5,28 +5,24 @@ import {
   LabelBuilder,  
 } from 'discord.js';
 
-export async function textPrompt(interaction, message) {
-  try {
-    const modal = new ModalBuilder()
-        .setCustomId('orderPriceModal')
-        .setTitle('Order Price');
-    
-    const textInput = new TextInputBuilder()
-        .setCustomId('orderPriceInput')
-        .setStyle(TextInputStyle.Short)
-        .setMinimumLength(1)
-        .setMaximumLength(7)
-        .setPlaceholder('00.00')
-        .setRequired(true);
+export async function textPrompt(interaction, message, orderId, threadId) {
+  const modal = new ModalBuilder()
+      .setCustomId(`${orderId}_orderPriceModal_${threadId}`)
+      .setTitle('Order Price');
+  
+  const textInput = new TextInputBuilder()
+      .setCustomId('orderPriceInput')
+      .setStyle(TextInputStyle.Short)
+      .setMinimumLength(1)
+      .setMaximumLength(7)
+      .setPlaceholder('00.00')
+      .setRequired(true);
 
-    const label = new LabelBuilder()
-        .setLabel(message)
-        .setTextInputComponent(textInput);
-    
-    modal.addLabelComponents(label);
+  const label = new LabelBuilder()
+      .setLabel(message)
+      .setTextInputComponent(textInput);
+  
+  modal.addLabelComponents(label);
 
-    await interaction.showModal(modal);
-  } catch (err) {
-    console.error("text input error:", err);
-  }
+  await interaction.showModal(modal);
 }

@@ -5,27 +5,23 @@ import {
 } from 'discord.js';
 
 export async function imagePrompt(orderId, interaction, notifType, title) {
-  try {
-    const modal = new ModalBuilder()
-        .setCustomId(`${orderId}_${notifType}_imagePromptModal_${interaction.channel.id}`)
-        .setTitle(`Image Proof: ${title}`);
-    
-    const fileUpload = new FileUploadBuilder()
-        .setCustomId('imageInput')
-        .setMinValues(1)
-        .setMaxValues(1)
-        .setRequired(true);
+  const modal = new ModalBuilder()
+      .setCustomId(`${orderId}_${notifType}_imagePromptModal_${interaction.channel.id}`)
+      .setTitle(`Image Proof: ${title}`);
+  
+  const fileUpload = new FileUploadBuilder()
+      .setCustomId('imageInput')
+      .setMinValues(1)
+      .setMaxValues(1)
+      .setRequired(true);
 
-    const label = new LabelBuilder()
-        .setLabel('Send Image Proof of Order Update')
-        .setFileUploadComponent(fileUpload);
-    
-    modal.addLabelComponents(label);
+  const label = new LabelBuilder()
+      .setLabel('Send Image Proof of Order Update')
+      .setFileUploadComponent(fileUpload);
+  
+  modal.addLabelComponents(label);
 
-    await interaction.showModal(modal);
-  } catch (err) {
-    console.error("File Input Error:", err);
-  }
+  await interaction.showModal(modal);
 }
 
 /*import { EmbedBuilder } from 'discord.js';
