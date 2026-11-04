@@ -138,6 +138,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await message.edit({
                     components: newButtons(message, [0,1,2]),
                 });
+                
+                // Image Prompt
+                let imageProof = await imagePrompt(orderId, interaction, notifType, "Order Bought/Errand Done");
 
                 // Send Interaction Notif
                 await channel.send(`Errand Accomplishment ✅ Confirmed by ${interaction.user}`);
@@ -154,9 +157,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     }
                 };
                 toSheets(payload);*/
-                
-                // Image Prompt
-                let imageProof = await imagePrompt(orderId, interaction, notifType, "Order Bought/Errand Done");
             },
             "imagePromptModal" : async () => {
                 // Extract the value from the specific text input custom ID
