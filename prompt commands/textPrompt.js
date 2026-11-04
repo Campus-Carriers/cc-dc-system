@@ -13,7 +13,9 @@ export async function textPrompt(interaction, message) {
     
     const textInput = new TextInputBuilder()
         .setCustomId('orderPriceInput')
-        .setStyle(TextInputStyle.Short) 
+        .setStyle(TextInputStyle.Short)
+        .setMinimumLength(1)
+        .setMaximumLength(7)
         .setPlaceholder('00.00')
         .setRequired(true);
 

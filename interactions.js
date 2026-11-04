@@ -208,6 +208,21 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             await interaction.editReply({
                 content: `Order Price ${submittedText} confirmed by ${interaction.user}`
             });
+
+            // Send Info to Apps Script, Trigger Errand Done
+            payload = {
+                action: 'bought/done',
+                orderId: orderId,
+                data: {
+                    timestamp: timeNow,
+                    carrier: carrier.username,
+                    threadId: threadId,
+                    info: {
+                        price: submittedText,
+                    },
+                }
+            };
+            toSheets(payload);
         },
         "surcharge " : () => {},
         "arrived" : {
