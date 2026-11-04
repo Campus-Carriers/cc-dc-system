@@ -34,7 +34,7 @@ export function commands(channel, res, orderId, notifType, info) {
         },
         "update_boughtOrDone" : () => {
             console.log(`channel: ${channel}`);
-            message = "Errand done:";
+            message = "Press the button below once you have bought the order or accomplished the errand.";
             title = "Order Update: Errand Accomplished";
             buttons = [
                 // Id, Label, Style, Disabled
@@ -45,7 +45,21 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);
         },
         "surcharge" : () => {},
-        "update_arrived" : () => {},
+        "update_arrived" : () => {
+            // Send Price Breakdown
+            channel.send(`Here is the order's Price Breakdown:\n${info.body.priceBreakdown}`);
+
+            // Send Arrived at Delivery Location Prompt
+            message = `Press the button below once you have arrived at the delivery address: ${info.body.deliveryLoc}.`;
+            title = "Order Update: Arrived at Delivery Location";
+            buttons = [
+                // Id, Label, Style, Disabled
+                [`${orderId}_arrived_arrived_${channelId}`,"Arrived","Primary",false],
+                [`${orderId}_arrived_confirm_${channelId}`,"Confirm","Secondary",true],
+                [`${orderId}_arrived_undo_${channelId}`,"Undo","Secondary",true],
+            ];
+            sendMessage(channel, res, title, message, color, buttons);
+        },
         "update_delivered" : () => {},
         "remarks" : () => {},
     };

@@ -122,8 +122,10 @@ client.on("interactionCreate", async (interaction) => {
     
     // Acknowledge Button Click
     const opensModal =
-      notifType === "bought/done" && buttonId === "confirm";
-    if (notifType !== "price" && !opensModal) {
+      (notifType === "bought/done" && buttonId === "confirm") ||
+      (notifType === "arrived" && buttonId === "confirm") ||
+      (notifType === "delivered" && buttonId === "confirm");
+    if (!opensModal) {
       await interaction.deferReply();
     }
 
