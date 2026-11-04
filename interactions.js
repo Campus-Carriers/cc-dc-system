@@ -2,7 +2,7 @@
 //// INTERACTIONS Handle Button/Etc Interactions ////
 /////////////////////////////////////////////////////
 import { newButtons } from './prompt commands/newButtons.js';
-import { imagePrompt } from './prompt commands/imagePrompt.js';
+import { pricePrompt } from './prompt commands/pricePrompt.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
@@ -133,20 +133,20 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             },
             "confirm" : async () => {
                 console.log(`done confirm`);
+
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2]),
                 });
 
-                // Send Interaction Notif
-                await interaction.editReply({
-                    content: `Errand Accomplishment ✅ Confirmed by ${interaction.user}`
-                });
-                
-                // Image Prompt
-                let imageProof = await imagePrompt(interaction.user, channel, "n Errand Accomplishment");
+                // Image & Price Prompt
+                await pricePrompt(orderId, interaction, notifType, threadId);
+            },
+            "orderPriceModal" : async () => {
+                const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
+                const submittedPrice = interaction.fields.getTextInputValue('orderPriceInput');
 
-                // Send Info to Apps Script, Trigger Errand Done
+                // Send Info to Apps Script (Image Proof, Errand Price), Trigger Errand Done
                 payload = {
                     action: notifType,
                     orderId: orderId,
@@ -155,27 +155,30 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                         carrier: carrier.username,
                         threadId: threadId,
                         info: {
-                            imageProof: imageProof.url || 'error',
+                            imageProof: imageProof.url,
+                            price: submittedPrice,
                         },
                     }
                 };
-                toSheets(payload);
+                await toSheets(payload);
+                
+                // Send Interaction Notif
+                await interaction.editReply(`Errand Accomplishment ✅ Confirmed with: Image Proof ${imageProof.name} and Order Price ${submittedPrice}PHP submitted by ${interaction.user}.`);
             },
             "undo" : async () => {
                 console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
-                components: newButtons(message, [1,2]),
+                    components: newButtons(message, [1,2]),
                 });
 
                 // Send Interaction Notif
                 await interaction.editReply({
-                content: `Errand Accomplishment ❌ Undone by ${interaction.user}`
+                    content: `Errand Accomplishment ❌ Undone by ${interaction.user}`
                 });
             },
         },
-        "orderPrice" : async () => {},
-        "surcharge" : () => {},
+        "surcharge " : () => {},
         "arrived" : {
             "arrived" : async () => {
                 // Send Interaction Notif
@@ -241,9 +244,13 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
         "remarks" : () => {},
     };
 
-    if (buttonId !== "none") {
-        console.log("not none");
-        return(interactions[notifType][buttonId]);
+    try {
+        if (buttonId !== "none") {
+            console.log("not none");
+            return(interactions[notifType][buttonId]);
+        }
+        else { console.log("none"); return(interactions[notifType]); }
+    } catch (error) {
+        console.log(`Interaction Error: ${error}`)
     }
-    else { console.log("none"); return(interactions[notifType]); }
 }
