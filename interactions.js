@@ -143,7 +143,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
 
                 // Send Interaction Notif
-                await interaction.editReply(`Errand Accomplishment ✅ Confirmed by ${interaction.user}`);//channel.send
+                await channel.send(`Errand Accomplishment ✅ Confirmed by ${interaction.user}`);
 
                 /*// Send Info to Apps Script, Trigger Errand Done
                 payload = {
@@ -182,7 +182,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await toSheets(payload);
                 
                 // Send Interaction Notif
-                await channel.send(`Image Proof ${imageProof.name} and order price ${submittedPrice} submitted by ${interaction.user}`);
+                await interaction.editReply(`Image Proof ${imageProof.name} and order price ${submittedPrice} submitted by ${interaction.user}`);//channel.send
             },
             "undo" : async () => {
                 console.log(`undo`);
