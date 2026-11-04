@@ -207,7 +207,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "imagePromptModal" : async () => {
                 const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
 
-                // Send Info to Apps Script (Image Proof, Errand Price), Trigger Errand Done
+                // Send Info to Apps Script (Image Proof,), Trigger Order Delivery
                 payload = {
                     action: notifType,
                     orderId: orderId,
@@ -239,9 +239,62 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             },
         },
         "delivered" : {
-            "delivered" : async () => {},
-            "confirm" : async () => {},
-            "undo" : async () => {},
+            "delivered" : async () => {
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Please Confirm [?] Delivery, Carrier ${interaction.user}`
+                });
+                console.log(`delivered`);
+
+                // Disable Bought/Done Button
+                await message.edit({
+                    components: newButtons(message, [0]),
+                });
+            },
+            "confirm" : async () => {
+                console.log(`confirm`);
+
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+                
+                // Image Prompt
+                await imagePrompt(orderId, interaction, notifType, "Order Delivery");
+            },
+            "imagePromptModal" : async () => {
+                const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
+
+                // Send Info to Apps Script (Image Proof), Trigger Customer Remarks
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            imageProof: imageProof.url,
+                        },
+                    }
+                };
+                await toSheets(payload);
+                
+                // Send Interaction Notif
+                await interaction.editReply(`Delivery ✅ Confirmed with: Image Proof ${imageProof.name}.`);
+            },
+            "undo" : async () => {
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [1,2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Arrival ❌ Undone by ${interaction.user}`
+                });
+            },
         },
         "remarks" : () => {},
     };

@@ -60,7 +60,18 @@ export function commands(channel, res, orderId, notifType, info) {
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "update_delivered" : () => {},
+        "update_delivered" : () => {
+            // Send Arrived at Delivery Location Prompt
+            message = `Press the button below once you have handed over the order.`;
+            title = "Order Update: Order Delivered";
+            buttons = [
+                // Id, Label, Style, Disabled
+                [`${orderId}_delivered_delivered_${channelId}`,"Arrived","Primary",false],
+                [`${orderId}_delivered_confirm_${channelId}`,"Confirm","Secondary",true],
+                [`${orderId}_delivered_undo_${channelId}`,"Undo","Secondary",true],
+            ];
+            sendMessage(channel, res, title, message, color, buttons);
+        },
         "remarks" : () => {},
     };
     return(commands[notifType]);
