@@ -46,7 +46,11 @@ export function commands(channel, res, orderId, notifType, info) {
         },
         "surcharge" : () => {},
         "update_arrived" : () => {
-            message = `Press the button below once you have arrived at the delivery address: ${info.body}.`;
+            // Send Price Breakdown
+            channel.send(`Here is the order's Price Breakdown:\n${info.body.priceBreakdown}`);
+
+            // Send Arrived at Delivery Location Prompt
+            message = `Press the button below once you have arrived at the delivery address: ${info.body.deliveryLoc}.`;
             title = "Order Update: Arrived at Delivery Location";
             buttons = [
                 // Id, Label, Style, Disabled
