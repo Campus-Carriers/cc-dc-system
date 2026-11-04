@@ -202,7 +202,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
                 
                 // Image Prompt
-                let imageProof = await imagePrompt(interaction.user, channel, " Delivery Location Arrival");
+                await imagePrompt(interaction.user, channel, " Delivery Location Arrival");
             },
             "imagePromptModal" : async () => {
                 const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
