@@ -121,7 +121,12 @@ client.on("interactionCreate", async (interaction) => {
     console.log(custId, orderId, notifType, buttonId, threadId);
     
     // Acknowledge Button Click
-    if (!interaction.isModalSubmit()) { await interaction.deferReply(); }
+    const opensModal =
+      notifType === "bought/done" &&
+      (buttonId === "confirm" || buttonId === "imagePromptModal");
+    if (notifType !== "price" && !opensModal) {
+      await interaction.deferReply();
+    }
 
 ////// ACT ON BUTTON CLICK - based on notif type
     console.log(`${notifType}+${buttonId}`);
