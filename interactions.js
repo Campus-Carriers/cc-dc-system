@@ -199,16 +199,14 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await message.edit({
                     components: newButtons(message, [0,1,2]),
                 });
-
-                // Send Interaction Notif
-                await interaction.editReply({
-                    content: `Arrival ✅ Confirmed by ${interaction.user}`
-                });
                 
                 // Image Prompt
                 let imageProof = await imagePrompt(interaction.user, channel, " Delivery Location Arrival");
-                
-                // Send Info to Apps Script, Trigger Errand Done
+            },
+            "imagePromptModal" : async () => {
+                const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
+
+                // Send Info to Apps Script (Image Proof, Errand Price), Trigger Errand Done
                 payload = {
                     action: notifType,
                     orderId: orderId,
@@ -217,11 +215,14 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                         carrier: carrier.username,
                         threadId: threadId,
                         info: {
-                            imageProof: imageProof.url || 'error',
+                            imageProof: imageProof.url,
                         },
                     }
                 };
-                toSheets(payload);
+                await toSheets(payload);
+                
+                // Send Interaction Notif
+                await interaction.editReply(`Arrival ✅ Confirmed by ${interaction.user}`);
             },
             "undo" : async () => {
                 console.log(`undo`);
