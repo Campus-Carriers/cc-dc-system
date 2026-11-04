@@ -17,7 +17,7 @@ export async function imagePrompt(orderId, interaction, notifType, title) {
 
   const imageLabel = new LabelBuilder()
       .setLabel("Send Image Proof of Order Update:")
-      .setDescription("For images with the customer, or any other person, please make sure to ask for their consent before taking the picture. Notify them that it will be sent to the CC database.")
+      .setDescription("For images with the customer, ask for consent!! Notify them that it will be sent to the CC database.")
       .setFileUploadComponent(fileUpload);
   
   modal.addLabelComponents(imageLabel);
