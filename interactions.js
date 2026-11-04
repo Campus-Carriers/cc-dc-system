@@ -143,7 +143,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
 
                 // Send Interaction Notif
-                await channel.send(`Errand Accomplishment ✅ Confirmed by ${interaction.user}`);
+                await interaction.editReply(`Errand Accomplishment ✅ Confirmed by ${interaction.user}`);//channel.send
 
                 /*// Send Info to Apps Script, Trigger Errand Done
                 payload = {
