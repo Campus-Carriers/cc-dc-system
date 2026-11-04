@@ -2,8 +2,7 @@
 //// INTERACTIONS Handle Button/Etc Interactions ////
 /////////////////////////////////////////////////////
 import { newButtons } from './prompt commands/newButtons.js';
-import { imagePrompt } from './prompt commands/imagePrompt.js';
-import { textPrompt } from './prompt commands/textPrompt.js';
+import { pricePrompt } from './prompt commands/pricePrompt.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
@@ -135,8 +134,8 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "confirm" : async () => {
                 console.log(`done confirm`);
 
-                // Image Prompt
-                await imagePrompt(orderId, interaction, notifType, "Order Bought/Errand Done");
+                // Image & Price Prompt
+                await pricePrompt(orderId, interaction, notifType, orderId, threadId);
 
                 // Disable Button/s
                 await message.edit({
@@ -154,35 +153,36 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                         timestamp: timeNow,
                         carrier: carrier.username,
                         threadId: threadId,
-                        info: {},
+                        info: {
+                            imageProof: imageProof.url,
+                            price: submittedPrice,
+                        },
                     }
                 };
                 toSheets(payload);*/
             },
-            "imagePromptModal" : async () => {
-                // Extract the value from the specific text input custom ID
-                const imageProof = interaction.fields.getUploadedFiles('imageInput');
+            "orderPriceModal" : async () => {
+                const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
+                const submittedPrice = interaction.fields.getTextInputValue('orderPriceInput');
 
-                // Open the price prompt before doing other work that may delay acknowledgement.
-                await textPrompt(interaction, `Enter Order/Errand Price: `, orderId, threadId);
-
-                // Send Interaction Notif
-                await channel.send(`Image Proof ${imageProof.filename} submitted by ${interaction.user}`);
-
-                // Send Info to Apps Script, Trigger Errand Done
+                // Send Info to Apps Script (Image Proof, Errand Price), Trigger Errand Done
                 payload = {
-                    action: 'bought/done',
+                    action: notifType,
                     orderId: orderId,
                     data: {
                         timestamp: timeNow,
                         carrier: carrier.username,
                         threadId: threadId,
                         info: {
-                            imageProof: imageProof.url || 'error',
+                            imageProof: imageProof.url,
+                            price: submittedPrice,
                         },
                     }
                 };
-                toSheets(payload);
+                await toSheets(payload);
+                
+                // Send Interaction Notif
+                await channel.send(`Image Proof ${imageProof.name} and order price ${submittedPrice} submitted by ${interaction.user}`);
             },
             "undo" : async () => {
                 console.log(`undo`);
@@ -196,30 +196,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     content: `Errand Accomplishment ❌ Undone by ${interaction.user}`
                 });
             },
-        },
-        "orderPriceModal" : async () => {
-            // Extract the value from the specific text input custom ID
-            const submittedText = interaction.fields.getTextInputValue('orderPriceInput');
-
-            // Send Interaction Notif
-            await interaction.editReply({
-                content: `Order Price ${submittedText} confirmed by ${interaction.user}`
-            });
-
-            // Send Info to Apps Script, Trigger Errand Done
-            payload = {
-                action: 'bought/done',
-                orderId: orderId,
-                data: {
-                    timestamp: timeNow,
-                    carrier: carrier.username,
-                    threadId: threadId,
-                    info: {
-                        price: submittedText,
-                    },
-                }
-            };
-            toSheets(payload);
         },
         "surcharge " : () => {},
         "arrived" : {

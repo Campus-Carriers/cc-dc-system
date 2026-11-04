@@ -15,11 +15,11 @@ export async function imagePrompt(orderId, interaction, notifType, title) {
       .setMaxValues(1)
       .setRequired(true);
 
-  const label = new LabelBuilder()
+  const imageLabel = new LabelBuilder()
       .setLabel('Send Image Proof of Order Update')
       .setFileUploadComponent(fileUpload);
   
-  modal.addLabelComponents(label);
+  modal.addLabelComponents(imageLabel);
 
   await interaction.showModal(modal);
 }
