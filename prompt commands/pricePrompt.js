@@ -5,7 +5,7 @@ import {
   LabelBuilder,  
 } from 'discord.js';
 
-export async function pricePrompt(orderId, interaction, notifType, orderId, threadId) {
+export async function pricePrompt(orderId, interaction, notifType, threadId) {
   // Modal
   const modal = new ModalBuilder()
       .setCustomId(`${orderId}_${notifType}_orderPriceModal_${threadId}`)

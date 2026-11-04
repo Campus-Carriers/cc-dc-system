@@ -135,7 +135,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`done confirm`);
 
                 // Image & Price Prompt
-                await pricePrompt(orderId, interaction, notifType, orderId, threadId);
+                await pricePrompt(orderId, interaction, notifType, threadId);
 
                 // Disable Button/s
                 await message.edit({
