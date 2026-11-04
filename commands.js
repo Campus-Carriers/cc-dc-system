@@ -34,7 +34,7 @@ export function commands(channel, res, orderId, notifType, info) {
         },
         "update_boughtOrDone" : () => {
             console.log(`channel: ${channel}`);
-            message = "Errand done:";
+            message = "Press the button below once you have bought the order or accomplished the errand.";
             title = "Order Update: Errand Accomplished";
             buttons = [
                 // Id, Label, Style, Disabled
@@ -46,7 +46,7 @@ export function commands(channel, res, orderId, notifType, info) {
         },
         "surcharge" : () => {},
         "update_arrived" : () => {
-            message = "Arrived:";
+            message = `Press the button below once you have arrived at the delivery address: ${info.body}.`;
             title = "Order Update: Arrived at Delivery Location";
             buttons = [
                 // Id, Label, Style, Disabled
