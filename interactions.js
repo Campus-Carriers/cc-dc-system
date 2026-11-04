@@ -223,7 +223,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await toSheets(payload);
                 
                 // Send Interaction Notif
-                await interaction.editReply(`Arrival ✅ Confirmed by ${interaction.user}`);
+                await interaction.editReply(`Arrival ✅ Confirmed with: Image Proof ${imageProof.name}.`);
             },
             "undo" : async () => {
                 console.log(`undo`);
