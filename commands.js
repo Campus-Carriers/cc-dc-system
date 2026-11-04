@@ -44,7 +44,6 @@ export function commands(channel, res, orderId, notifType, info) {
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "orderPrice" : () => {},
         "surcharge" : () => {},
         "update_arrived" : () => {},
         "update_delivered" : () => {},
