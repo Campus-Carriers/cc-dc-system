@@ -3,6 +3,7 @@
 /////////////////////////////////////////////////////
 import { newButtons } from './prompt commands/newButtons.js';
 import { pricePrompt } from './prompt commands/pricePrompt.js';
+import { imagePrompt } from './prompt commands/imagePrompt.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
