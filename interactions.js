@@ -140,9 +140,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
 
                 // Send Interaction Notif
-                await interaction.editReply({
-                    content: `Errand Accomplishment ✅ Confirmed by ${interaction.user}`
-                });
+                await channel.send(`Errand Accomplishment ✅ Confirmed by ${interaction.user}`);
 
                 /*// Send Info to Apps Script, Trigger Errand Done
                 payload = {
@@ -165,9 +163,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 const imageProof = interaction.fields.getUploadedFiles('imageInput');
 
                 // Send Interaction Notif
-                await interaction.editReply({
-                    content: `Image Proof ${imageProof.filename} submitted by ${interaction.user}`
-                });
+                await channel.send(`Image Proof ${imageProof.filename} submitted by ${interaction.user}`);
 
                 // Send Info to Apps Script, Trigger Errand Done
                 payload = {
