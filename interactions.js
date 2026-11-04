@@ -234,9 +234,13 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
         "remarks" : () => {},
     };
 
-    if (buttonId !== "none") {
-        console.log("not none");
-        return(interactions[notifType][buttonId]);
+    try {
+        if (buttonId !== "none") {
+            console.log("not none");
+            return(interactions[notifType][buttonId]);
+        }
+        else { console.log("none"); return(interactions[notifType]); }
+    } catch (error) {
+        console.log(`Interaction Error: ${error}`)
     }
-    else { console.log("none"); return(interactions[notifType]); }
 }
