@@ -6,7 +6,7 @@ import {
 
 export async function imagePrompt(orderId, interaction, notifType, title) {
   const modal = new ModalBuilder()
-      .setCustomId(`${orderId}_${notifType}_imagePromptModal_${interaction.channel.id}`)
+      .setCustomId(`${orderId}_${notifType}_imagePromptModal_${interaction.channel}`)
       .setTitle(`Image Proof: ${title}`);
   
   const fileUpload = new FileUploadBuilder()
