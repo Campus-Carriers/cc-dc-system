@@ -134,32 +134,13 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "confirm" : async () => {
                 console.log(`done confirm`);
 
-                // Image & Price Prompt
-                await pricePrompt(orderId, interaction, notifType, threadId);
-
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2]),
                 });
 
-                // Send Interaction Notif
-                await channel.send(`Errand Accomplishment ✅ Confirmed by ${interaction.user}`);
-
-                /*// Send Info to Apps Script, Trigger Errand Done
-                payload = {
-                    action: notifType,
-                    orderId: orderId,
-                    data: {
-                        timestamp: timeNow,
-                        carrier: carrier.username,
-                        threadId: threadId,
-                        info: {
-                            imageProof: imageProof.url,
-                            price: submittedPrice,
-                        },
-                    }
-                };
-                toSheets(payload);*/
+                // Image & Price Prompt
+                await pricePrompt(orderId, interaction, notifType, threadId);
             },
             "orderPriceModal" : async () => {
                 const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
@@ -182,7 +163,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await toSheets(payload);
                 
                 // Send Interaction Notif
-                await interaction.editReply(`Image Proof ${imageProof.name} and order price ${submittedPrice} submitted by ${interaction.user}`);//channel.send
+                await interaction.editReply(`Errand Accomplishment ✅ Confirmed with: Image Proof ${imageProof.name} and Order Price ${submittedPrice}PHP submitted by ${interaction.user}.`);
             },
             "undo" : async () => {
                 console.log(`undo`);

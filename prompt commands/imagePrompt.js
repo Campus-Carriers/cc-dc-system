@@ -16,7 +16,7 @@ export async function imagePrompt(orderId, interaction, notifType, title) {
       .setRequired(true);
 
   const imageLabel = new LabelBuilder()
-      .setLabel('Send Image Proof of Order Update')
+      .setLabel('Send Image Proof of Order Update:')
       .setFileUploadComponent(fileUpload);
   
   modal.addLabelComponents(imageLabel);

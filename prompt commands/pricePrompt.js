@@ -20,7 +20,7 @@ export async function pricePrompt(orderId, interaction, notifType, threadId) {
       .setRequired(true);
 
   const imageLabel = new LabelBuilder()
-      .setLabel('Send Image Proof of Order Update')
+      .setLabel('Send Image Proof of Order Update:')
       .setFileUploadComponent(fileUpload);
   
   modal.addLabelComponents(imageLabel);
@@ -34,7 +34,7 @@ export async function pricePrompt(orderId, interaction, notifType, threadId) {
       .setRequired(true);
 
   const textLabel = new LabelBuilder()
-      .setLabel('Enter Order/Errand Price: ')
+      .setLabel('Enter Order/Errand Price:')
       .setTextInputComponent(textInput);
   
   modal.addLabelComponents(textLabel);
