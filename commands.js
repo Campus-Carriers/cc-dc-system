@@ -61,7 +61,20 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);
         },
         "update_delivered" : () => {},
-        "remarks" : () => {},
+        "remarks" : () => {
+            console.log(`channel: ${channel}`);
+            console.log('Remarks prompted');
+
+            message = "Please click the Remarks button to input any comments or remarks from you, the carrier, or from the customer.";
+            title = "Customer and Carrier Remarks";
+            buttons = [
+                [`${orderId}_remarks_remarks_${channelId}`,"Remarks","Secondary",false],
+                [`${orderId}_remarks_confirm_${channelId}`,"Confirm","Secondary",false],
+                [`${orderId}_remarks_undo_${channelId}`,"Undo","Secondary",true]
+            ];
+
+            sendMessage(channel, res, title, message, color, buttons);
+        },
     };
     return(commands[notifType]);
 }
