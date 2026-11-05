@@ -59,6 +59,7 @@ export function commands(channel, res, orderId, notifType, info) {
                 [`${orderId}_arrived_undo_${channelId}`,"Undo","Secondary",true],
             ];
             sendMessage(channel, res, title, message, color, buttons);
+            console.log(`THREADID: ${channelId}`);
         },
         "update_delivered" : () => {
             // Send Arrived at Delivery Location Prompt

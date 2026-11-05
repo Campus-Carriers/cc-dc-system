@@ -265,6 +265,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "imagePromptModal" : async () => {
                 const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
 
+                console.log(`THREADID: ${threadId}`);
                 // Send Info to Apps Script (Image Proof), Trigger Customer Remarks
                 payload = {
                     action: notifType,
