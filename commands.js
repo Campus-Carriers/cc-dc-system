@@ -28,7 +28,8 @@ export function commands(channel, res, orderId, notifType, info) {
             buttons = [
                 // Id, Label, Style, Disabled
                 [`${orderId}_dispatch_dispatched_${channelId}`,"Carrier Dispatched","Success",false],
-                [`${orderId}_dispatch_undo_${channelId}`,"Undo","Secondary",true]
+                [`${orderId}_dispatch_undo_${channelId}`,"Undo","Secondary",true],
+                [`${orderId}_dispatch_surcharge_${channelId}`,"Surcharge","Warn",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
@@ -40,12 +41,25 @@ export function commands(channel, res, orderId, notifType, info) {
                 // Id, Label, Style, Disabled
                 [`${orderId}_bought/done_done_${channelId}`,"Errand Done","Success",false],
                 [`${orderId}_bought/done_confirm_${channelId}`,"Confirm","Secondary",true],
-                [`${orderId}_bought/done_undo_${channelId}`,"Undo","Secondary",true]
+                [`${orderId}_bought/done_undo_${channelId}`,"Undo","Secondary",true],
+                [`${orderId}_bought/done_surcharge_${channelId}`,"Surcharge","Warn",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
         "orderPrice" : () => {},
-        "surcharge" : () => {},
+        "surcharge" : () => {
+            console.log(`channel: ${channel}`);
+            console.log('Surcharge prompted');
+
+            message = "Surcharge noted";
+            title = "Surcharge Update";
+            buttons = [
+                [`${orderId}_surcharge_confirm_${channelId}`,"Confirm","Secondary",true],
+                [`${orderId}_surcharge_surcharge_${channelId}`,"Surcharge","Warn",false]
+            ];
+
+            sendMessage(channel, res, title, message, color, buttons);
+        },
         "update_arrived" : () => {},
         "update_delivered" : () => {},
         "remarks" : () => {},

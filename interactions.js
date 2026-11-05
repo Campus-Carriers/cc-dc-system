@@ -3,6 +3,7 @@
 /////////////////////////////////////////////////////
 import { newButtons } from './prompt commands/newButtons.js';
 import { imagePrompt } from './prompt commands/imagePrompt.js';
+import { surchargePrompt } from './prompt commands/surchargePrompt.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
@@ -89,7 +90,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Wait 15 seconds before disabling undo
                 timeOut = await setTimeout(15000);
                 message.edit({
-                    components: newButtons(message, [0,1]),
+                    components: newButtons(message, [0,1,2]),
                 });
 
                 // Send Info to Apps Script, Trigger Errand Done
@@ -135,7 +136,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`done confirm`);
                 // Disable Button/s
                 await message.edit({
-                    components: newButtons(message, [0,1,2]),
+                    components: newButtons(message, [0,1,2,3]),
                 });
 
                 // Send Interaction Notif
@@ -175,7 +176,44 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             },
         },
         "orderPrice" : async () => {},
-        "surcharge" : () => {},
+        "surcharge" : async () => {
+            "confirm" : async () => { // double check if needed
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Please Confirm [?] Applicable Surcharges, Carrier ${interaction.user}`
+                });
+                console.log(`surcharge`);
+
+                // Disable Bought/Done Button
+                await message.edit({
+                components: newButtons(message, [0]),
+                });
+            },
+            "surcharge" : () => {
+                var surchargeInfo = surchargePrompt(interaction, 'Select Applicable Surcharge:');
+            },
+        },
+        "surchargeModal" : async () => {
+            const selectedSurcharges = interaction.fields.getCheckboxGroup('surchargeCheckboxes');
+        
+            await interaction.reply({
+                content: `Surcharges applied: ${selectedSurcharges.join(', ')}`
+            });
+
+            payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            surchargeInfo: selectedSurcharges || 'error',
+                        },
+                    }
+            };
+            toSheets(payload);
+        }
         "arrived" : {
             "arrived" : async () => {},
             "confirm" : async () => {},
