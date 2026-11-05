@@ -121,7 +121,7 @@ client.on("interactionCreate", async (interaction) => {
     console.log(custId, orderId, notifType, buttonId, threadId);
 
     // Acknowledge Button Click
-    if (notifType !== "price") { await interaction.deferReply(); }
+    if (notifType !== "price" && buttonId !== "surcharge") { await interaction.deferReply(); }
 
 ////// ACT ON BUTTON CLICK - based on notif type
     console.log(`${notifType}+${buttonId}`);

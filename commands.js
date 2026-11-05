@@ -29,7 +29,7 @@ export function commands(channel, res, orderId, notifType, info) {
                 // Id, Label, Style, Disabled
                 [`${orderId}_dispatch_dispatched_${channelId}`,"Carrier Dispatched","Success",false],
                 [`${orderId}_dispatch_undo_${channelId}`,"Undo","Secondary",true],
-                [`${orderId}_dispatch_surcharge_${channelId}`,"Surcharge","Warn",false]
+                [`${orderId}_dispatch_surcharge_${channelId}`,"Surcharge","Secondary",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
@@ -42,7 +42,7 @@ export function commands(channel, res, orderId, notifType, info) {
                 [`${orderId}_bought/done_done_${channelId}`,"Errand Done","Success",false],
                 [`${orderId}_bought/done_confirm_${channelId}`,"Confirm","Secondary",true],
                 [`${orderId}_bought/done_undo_${channelId}`,"Undo","Secondary",true],
-                [`${orderId}_bought/done_surcharge_${channelId}`,"Surcharge","Warn",false]
+                [`${orderId}_bought/done_surcharge_${channelId}`,"Surcharge","Secondary",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
@@ -51,11 +51,12 @@ export function commands(channel, res, orderId, notifType, info) {
             console.log(`channel: ${channel}`);
             console.log('Surcharge prompted');
 
-            message = "Surcharge noted";
-            title = "Surcharge Update";
+            message = "Please click the Surcharge button to apply any applicable surcharges.";
+            title = "Applicable Surcharges";
             buttons = [
-                [`${orderId}_surcharge_confirm_${channelId}`,"Confirm","Secondary",true],
-                [`${orderId}_surcharge_surcharge_${channelId}`,"Surcharge","Warn",false]
+                [`${orderId}_surcharge_surcharge_${channelId}`,"Surcharge","Secondary",false],
+                [`${orderId}_surcharge_confirm_${channelId}`,"Confirm","Secondary",false],
+                [`${orderId}_surcharge_undo_${channelId}`,"Undo","Secondary",true]
             ];
 
             sendMessage(channel, res, title, message, color, buttons);

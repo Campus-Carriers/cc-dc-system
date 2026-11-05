@@ -4,7 +4,9 @@ import {
   LabelBuilder,  
 } from 'discord.js';
 
-export async function surchargePrompt(interaction, message) {
+export async function surchargePrompt(interaction, message, orderId) {
+    console.log('executing surcharge prompt');
+    console.log(`Order ID: ${orderId}`);
     // surcharge values
     var surchargeValues = [
                     { label: 'Peak Hours', value: 'peakHours', description: '11AM to 2PM and 5PM to 7PM' },
@@ -16,7 +18,7 @@ export async function surchargePrompt(interaction, message) {
     
     // build modal
     const modal = new ModalBuilder()
-        .setCustomId('surchargeModal')
+        .setCustomId(`${orderId}_surchargeModal`)
         .setTitle('Surcharge Options');
 
     // build modal contents
