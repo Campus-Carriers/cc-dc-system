@@ -26,16 +26,12 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "accept" : async () => {
                 // Send Interaction Notif
                 console.log(`Carrier ${carrier} is on the way`);
-                await interaction.editReply("You have accepted the order");
+                await interaction.editReply(`Errand ✅ Accepted by ${carrier}`);
 
                 // Disable Button/s
                 // TODO: make limiter
                 await message.edit({
                 components: newButtons(message, [0,1]),
-                });
-
-                await interaction.followUp({
-                    content: `Errand ✅ Accepted by ${carrier}`
                 });
 
                 // Create Private Thread with Carrier and EBs
