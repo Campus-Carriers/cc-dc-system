@@ -14,7 +14,7 @@ export async function remarksPrompt(interaction, orderId) {
     const customerTextInput = new TextInputBuilder()
         .setCustomId('customerRemarks')
         .setStyle(TextInputStyle.Short) 
-        .setPlaceholder('00.00')
+        .setPlaceholder('Enter customer remarks from carrier here...')
         .setRequired(true);
 
     const customerLabel = new LabelBuilder()
@@ -25,7 +25,7 @@ export async function remarksPrompt(interaction, orderId) {
     const carrierTextInput = new TextInputBuilder()
         .setCustomId('carrierRemarks')
         .setStyle(TextInputStyle.Short) 
-        .setPlaceholder('00.00')
+        .setPlaceholder('Enter carrier remarks from the customer here...')
         .setRequired(true);
 
     const carrierLabel = new LabelBuilder()

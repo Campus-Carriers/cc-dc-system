@@ -124,7 +124,8 @@ client.on("interactionCreate", async (interaction) => {
     const opensModal =
       (notifType === "bought/done" && buttonId === "confirm") ||
       (notifType === "arrived" && buttonId === "confirm") ||
-      (notifType === "delivered" && buttonId === "confirm");
+      (notifType === "delivered" && buttonId === "confirm") ||
+      (buttonId === "remarks");
     if (!opensModal) {
       await interaction.deferReply();
     }

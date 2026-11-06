@@ -240,7 +240,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "confirm" : async () => {},
             "undo" : async () => {},
         },
-        "remarks" : async () => {
+        "remarks" : {
             "remarks" : async () => {
                 console.log("showing remarks prompt");
 
@@ -282,8 +282,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             console.log('in remarks modal');
             var customerRemarks = interaction.fields.getTextInputValue('customerRemarks');
             var carrierRemarks = interaction.fields.getTextInputValue('carrierRemarks');
-            var remarksContent = `Carrier to Customer Remarks: ${customerRemarks}
-Customer to Carrier Remarks:${carrierRemarks}`;
+            var remarksContent = `**Carrier to Customer Remarks:**   ${customerRemarks}
+            
+**Customer to Carrier Remarks:**   ${carrierRemarks}`;
             console.log(remarksContent);
 
             await interaction.editReply({
