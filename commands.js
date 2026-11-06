@@ -62,6 +62,21 @@ export function commands(channel, res, orderId, notifType, info) {
         },
         "update_delivered" : () => {},
         "remarks" : () => {},
+        "post_delivery_log" : () => {
+            console.log(`channel: ${channel}`);
+            console.log('post delivery information prompted');
+            
+            // message should be sent from apps script
+            message = "Please double check if all information is accurate to this order.";
+            title = "Post Delivery Log";
+            buttons = [
+                [`${orderId}_postLog_edit_${channelId}`,"Edit Info","Secondary",false],
+                [`${orderId}_postLog_confirm_${channelId}`,"Confirm","Secondary",false],
+                [`${orderId}_postLog_undo_${channelId}`,"Undo","Secondary",true]
+            ];
+
+            sendMessage(channel, res, title, message, color, buttons);
+        },
     };
     return(commands[notifType]);
 }

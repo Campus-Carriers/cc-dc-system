@@ -240,6 +240,86 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "undo" : async () => {},
         },
         "remarks" : () => {},
+        "postLog" : {
+            "edit" : async () => {
+                // Show edit post log prompt
+                editPostLogPrompt(interaction, orderId);
+
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+            },
+            "confirm" : async () => {
+                console.log(`done confirm`);
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Post Delivery Log ✅ Confirmed by ${interaction.user}`
+                });
+
+                // edit this to send to admin
+            },
+            "undo" : async () => { // how will this unsend msg from confirm?? or confirm and done na
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [1,2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Post Delivery Log ❌ Undone by ${interaction.user}`
+                });
+            },
+        }
+        "postLogModal" : async () => {
+            console.log('in post log modal');
+            var carName = interaction.fields.getTextInputValue('carName');
+            var cusName = interaction.fields.getTextInputValue('cusName');
+            var timeDis = interaction.fields.getTextInputValue('timeDis');
+            var timeBought = interaction.fields.getTextInputValue('timeBought');
+            var timeDel = interaction.fields.getTextInputValue('timeDel');
+            var cusRemarks = interaction.fields.getTextInputValue('cusRemarks');
+            var carRemarks = interaction.fields.getTextInputValue('carRemarks');
+            var carFee = interaction.fields.getTextInputValue('carFee');
+
+            // check if needed when apps script is made
+            var newMessage = `**Post Delivery Log**
+    Carrier Name: ${carName}
+    Customer Name: ${cusName}
+    Time Carrier Dispatched: ${timeDis}
+    Time Bought Order: ${timeBought}
+    Time Delivered to Customer: ${timeDel}
+    Customer Remarks from Carrier: ${cusRemarks}
+    Carrier Remarks from Customer: ${carRemarks}
+
+    Total Carrier fee: ${carFee}`;
+            // Send Info to Apps Script, Trigger Errand Done
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            carrierName: carName || 'error',
+                            customerName: cusName  || 'error',
+                            timeDispatched: timeDis || 'error',
+                            timeBought: timeBought || 'error',
+                            timeDelivered: timeDel || 'error',
+                            customerRemarks: cusRemarks || 'error',
+                            carrierRemarks: carRemarks || 'error',
+                            carrierFee: carFee || 'error',
+                        },
+                    }
+                };
+                toSheets(payload); // this should trigger the sendAutomatedNotif() again
+        }
     };
 
     try {
