@@ -67,7 +67,17 @@ export function commands(channel, res, orderId, notifType, info) {
             console.log('post delivery information prompted');
             
             // message should be sent from apps script
-            message = "Please double check if all information is accurate to this order.";
+            message = `----------------------------------------------
+ 🛒 ${info.body.cusName}, ${info.body.deliveryLoc}:
+**Date: 10/28/2026 
+Carrier Name: ${info.body.carName}**
+> Time Carrier Dispatched: ${info.body.timeDis}
+> Time Bought Order: ${info.body.timeBought}
+> Time deliver to customer: ${info.body.timeDel}
+> Customer Remarks from Carrier: ${info.body.cusRemarks}
+> Carrier Remarks from Customer: ${info.body.carRemarks}
+Pricing (Total - CC:Carrier): ${info.body.priceBreakdown}
+ ----------------------------------------------`;
             title = "Post Delivery Log";
             buttons = [
                 [`${orderId}_postLog_edit_${channelId}`,"Edit Info","Secondary",false],
