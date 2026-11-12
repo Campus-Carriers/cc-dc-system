@@ -70,25 +70,20 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "dispatched" : async () => {
                 // Send Interaction Notif
                 await interaction.editReply({ 
-                    content: `Carrier ${interaction.user} Dispatched ✅ for ${orderId} ` 
+                    content: `Please Confirm [?] Acceptance of Order  ${orderId}, Carrier ${interaction.user}` 
                 });
-                
-                console.log("pre clear");
-                // Clear timeOut
-                if (timeOut) {
-                    clearTimeout(timeOut);
-                    console.log("time cleared");
-                }
 
                 // Disable Dispatched Button
                 await message.edit({
                     components: newButtons(message, [0]),
                 });
+            },
+            "confirm" : async () => {
+                console.log(`dispatch confirm`);
 
-                // Wait 15 seconds before disabling undo
-                timeOut = await setTimeout(15000);
-                message.edit({
-                    components: newButtons(message, [0,1]),
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
                 });
 
                 // Edit Dispatch and Raw Sheets
