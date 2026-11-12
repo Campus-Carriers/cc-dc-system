@@ -3,7 +3,7 @@
 /////////////////////////////////
 import 'dotenv/config';
 import { commands } from './commands.js';
-import { interactions } from './interactions.js';
+import { interactions, acceptedBy } from './interactions.js';
 import express from 'express';
 import {
   Client,
@@ -119,6 +119,15 @@ client.on("interactionCreate", async (interaction) => {
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
     console.log(custId, orderId, notifType, buttonId, threadId);
+
+    // Click User Validation (Sequence)
+    if ( ["confirm", "undo"].includes(buttonId) &&
+      acceptedBy(orderId) !== interaction.user.id) {
+      return interaction.reply({
+          content: "Only the carrier who accepted this order can confirm or undo it.",
+          ephemeral: true,
+      });
+    }
     
     // Acknowledge Button Click
     const opensModal =

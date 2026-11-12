@@ -8,6 +8,8 @@ import { toSheets } from './toSheets.js';
 import { time } from 'node:console';
 import { ChannelType } from 'discord.js';
 
+const carrierAssignment = new Map();
+
 export function interactions(notifType, buttonId, orderId, interaction, threadId) {
     // Get the Message Interacted With
     const message = interaction.message;
@@ -23,6 +25,14 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     const interactions = {
         "new" : {
             "accept" : async () => {
+                // Set Assigned Carrier
+                if (carrierAssignment.has(orderId)) {
+                    return;
+                }
+                else {
+                    carrierAssignment[orderId] = interaction.user;
+                }
+
                 // Send Interaction Notif
                 console.log(`Carrier ${carrier} is on the way`);
                 await interaction.editReply(`Errand ✅ Accepted by ${carrier}`);
@@ -245,4 +255,8 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     } catch (error) {
         console.log(`Interaction Error: ${error}`)
     }
+}
+
+export function acceptedBy(orderId) {
+    return acceptedOrders.get(orderId);
 }
