@@ -103,7 +103,7 @@ app.post("/trigger", async (req, res) => {
 // =========================
 // BUTTON INTERACTIONS
 // =========================
-globalThis.firstClick = {};
+globalThis.firstClick = new Map();
 console.log(firstClick);
 
 client.on("interactionCreate", async (interaction) => {
