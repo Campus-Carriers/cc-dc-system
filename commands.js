@@ -80,7 +80,8 @@ Pricing (Total - CC:Carrier): ${info.body.priceBreakdown}
  ----------------------------------------------`;
             title = "Post Delivery Log";
             buttons = [
-                [`${orderId}_postLog_edit_${channelId}`,"Edit Info","Secondary",false],
+                [`${orderId}_postLog_editInfo_${channelId}`,"Edit Info","Secondary",false],
+                [`${orderId}_postLog_editRemarks_${channelId}`,"Edit Remarks","Secondary",false],
                 [`${orderId}_postLog_confirm_${channelId}`,"Confirm","Secondary",false],
                 [`${orderId}_postLog_undo_${channelId}`,"Undo","Secondary",true]
             ];

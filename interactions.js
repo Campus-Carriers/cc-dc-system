@@ -4,6 +4,7 @@
 import { newButtons } from './prompt commands/newButtons.js';
 import { pricePrompt } from './prompt commands/pricePrompt.js';
 import { imagePrompt } from './prompt commands/imagePrompt.js';
+import { editPostLogInfo, editPostLogRemarks } from './prompt commands/editPostLogPrompt.js';
 import { toSheets } from './toSheets.js';
 import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
@@ -241,19 +242,33 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
         },
         "remarks" : () => {},
         "postLog" : {
-            "edit" : async () => {
+            "editInfo" : async () => {
+                console.log("showing post log information prompt");
+                console.log(`Order ID: ${orderId}`);
+                
                 // Show edit post log prompt
-                editPostLogPrompt(interaction, orderId);
+                editPostLogInfo(interaction, orderId);
 
                 await message.edit({
-                    components: newButtons(message, [0,1,2]),
+                    components: newButtons(message, [0,3]),
+                });
+            },
+            "editRemarks" : async () => {
+                console.log("showing post log remarks prompt");
+                console.log(`Order ID: ${orderId}`);
+                
+                // Show edit post log prompt
+                editPostLogRemarks(interaction, orderId);
+
+                await message.edit({
+                    components: newButtons(message, [1,3]),
                 });
             },
             "confirm" : async () => {
                 console.log(`done confirm`);
                 // Disable Button/s
                 await message.edit({
-                    components: newButtons(message, [0,1]),
+                    components: newButtons(message, [0,1,2]),
                 });
 
                 // Send Interaction Notif
@@ -267,7 +282,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
-                components: newButtons(message, [1,2]),
+                components: newButtons(message, [2,3]),
                 });
 
                 // Send Interaction Notif
@@ -275,27 +290,23 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 content: `Post Delivery Log ❌ Undone by ${interaction.user}`
                 });
             },
-        }
-        "postLogModal" : async () => {
+        },
+        "postLogInfoModal" : async () => {
             console.log('in post log modal');
             var carName = interaction.fields.getTextInputValue('carName');
             var cusName = interaction.fields.getTextInputValue('cusName');
             var timeDis = interaction.fields.getTextInputValue('timeDis');
             var timeBought = interaction.fields.getTextInputValue('timeBought');
             var timeDel = interaction.fields.getTextInputValue('timeDel');
-            var cusRemarks = interaction.fields.getTextInputValue('cusRemarks');
-            var carRemarks = interaction.fields.getTextInputValue('carRemarks');
             var carFee = interaction.fields.getTextInputValue('carFee');
 
             // check if needed when apps script is made
-            var newMessage = `**Post Delivery Log**
+            var newMessage = `**Post Delivery Log Information**
     Carrier Name: ${carName}
     Customer Name: ${cusName}
     Time Carrier Dispatched: ${timeDis}
     Time Bought Order: ${timeBought}
     Time Delivered to Customer: ${timeDel}
-    Customer Remarks from Carrier: ${cusRemarks}
-    Carrier Remarks from Customer: ${carRemarks}
 
     Total Carrier fee: ${carFee}`;
             // Send Info to Apps Script, Trigger Errand Done
@@ -312,14 +323,37 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                             timeDispatched: timeDis || 'error',
                             timeBought: timeBought || 'error',
                             timeDelivered: timeDel || 'error',
-                            customerRemarks: cusRemarks || 'error',
-                            carrierRemarks: carRemarks || 'error',
                             carrierFee: carFee || 'error',
                         },
                     }
                 };
                 toSheets(payload); // this should trigger the sendAutomatedNotif() again
-        }
+        },
+        "postLogRemarksModal" : async () => {
+            console.log('in post log modal');
+            var cusRemarks = interaction.fields.getTextInputValue('cusRemarks');
+            var carRemarks = interaction.fields.getTextInputValue('carRemarks');
+
+            // check if needed when apps script is made
+            var newMessage = `**Post Delivery Log Remarks**
+    Customer Remarks from Carrier: ${cusRemarks}
+    Carrier Remarks from Customer: ${carRemarks}`;
+            // Send Info to Apps Script, Trigger Errand Done
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            customerRemarks: cusRemarks || 'error',
+                            carrierRemarks: carRemarks || 'error',
+                        },
+                    }
+                };
+                toSheets(payload); // this should trigger the sendAutomatedNotif() again
+        },
     };
 
     try {

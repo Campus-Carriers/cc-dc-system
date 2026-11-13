@@ -5,17 +5,12 @@ import {
   LabelBuilder,  
 } from 'discord.js';
 
-export async function editPostLogPrompt(interaction, orderId, carName, delivLoc, cusName, timeDis, timeBought, timeDel, cusRemarks, carRemarks) {
+export async function editPostLogInfo(interaction, orderId, delivLoc, cusName, timeDis, timeBought, timeDel) {
   try {
     const modal = new ModalBuilder()
-        .setCustomId(`${orderId}_postLogModal`)
-        .setTitle("Post Delivery Log");
+        .setCustomId(`${orderId}_postLogInfoModal`)
+        .setTitle("Post Delivery Log Information");
 
-    const editCarrierName = makeLabel('carrierName', 
-                                        'Edit your name here...', 
-                                        'Edit Your Name: ', 
-                                        `Current Name: ${carName}`
-                                    );
     const editDelivLoc = makeLabel('deliveryLocation', 
                                 'Edit the delivery location here...', 
                                 'Edit the Delivery Location: ', 
@@ -41,6 +36,22 @@ export async function editPostLogPrompt(interaction, orderId, carName, delivLoc,
                                 'Edit Your Time Delivered: ', 
                                 `Current Time Delivered: ${timeDel}`
                             );
+    
+    modal.addLabelComponents(editDelivLoc, editCustomerName, editTimeDispatched, editTimeBought, editTimeDelivered);
+
+    await interaction.showModal(modal);
+  } catch (err) {
+    console.error("text input error:", err);
+  }
+}
+
+export async function editPostLogRemarks(interaction, orderId, cusRemarks, carRemarks) {
+  try {
+    const modal = new ModalBuilder()
+        .setCustomId(`${orderId}_postLogRemarksModal`)
+        .setTitle("Post Delivery Log Remarks");
+
+    
     const editCustomerRemarks = makeLabel('cusRemarks', 
                                 'Edit customer remarks from carrier here...', 
                                 'Edit Customer Remarks from Carrier: ', 
@@ -52,24 +63,25 @@ export async function editPostLogPrompt(interaction, orderId, carName, delivLoc,
                                 `Current Carrier Remarks from Customer: ${carRemarks}`
                             );
     
-    modal.addLabelComponents(editCarrierName, editDelivLoc, editCustomerName, editTimeDispatched, editTimeBought, editTimeDelivered, editCustomerRemarks, editCarrierRemarks);
+    modal.addLabelComponents(editCustomerRemarks, editCarrierRemarks);
 
     await interaction.showModal(modal);
   } catch (err) {
     console.error("text input error:", err);
-  }editCarrierNameInput
+  }
 }
 
-async function makeLabel(textInputCustomId, textInputPlaceholder, label, labelDesc){
+
+function makeLabel(textInputCustomId, textInputPlaceholder, label, labelDesc){
     const textInput = new TextInputBuilder()
         .setCustomId(textInputCustomId)
         .setStyle(TextInputStyle.Short) 
         .setPlaceholder(textInputPlaceholder)
         .setRequired(false);
 
-    const label = new LabelBuilder()
-        .setLabel(label)
-        .setDescription(labelDesc)
+    label = new LabelBuilder()
+        .setLabel(label || 'Missing label')
+        .setDescription(labelDesc || 'No current information')
         .setTextInputComponent(textInput);
     
     return label;
