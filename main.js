@@ -123,18 +123,13 @@ client.on("interactionCreate", async (interaction) => {
 
     if (firstClick.has(orderId)) {
       console.log(`been clicked by ${firstClick[orderId]}`);
-    } else {
-      firstClick.set(orderId, interaction.user.id);
-      console.log(`first click by ${interaction.user.id}`);
-    }
-
-    // Click User Validation (Sequence)
-    if ( ["confirm", "undo"].includes(buttonId) &&
-      acceptedBy(orderId) !== interaction.user.id) {
       return interaction.reply({
-          content: "Only the carrier who accepted this order can confirm or undo it.",
+          content: "This order has been claimed already.",
           ephemeral: true,
       });
+    } else {
+      firstClick.set(orderId, interaction.user.username);
+      console.log(`first click by ${interaction.user.username}`);
     }
     
     // Acknowledge Button Click
