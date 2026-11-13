@@ -3,7 +3,7 @@
 /////////////////////////////////
 import 'dotenv/config';
 import { commands } from './commands.js';
-import { interactions, acceptedBy } from './interactions.js';
+import { interactions } from './interactions.js';
 import express from 'express';
 import {
   Client,
