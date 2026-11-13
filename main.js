@@ -113,13 +113,6 @@ client.on("interactionCreate", async (interaction) => {
     `Button clicked: ${interaction.customId} by ${interaction.user.tag}`
   );
 
-  if (firstClick.has(orderId)) {
-    console.log(`been clicked by ${firstClick[orderId]}`);
-  } else {
-    firstClick.set(orderId, interaction.user.id);
-    console.log(`first click by ${interaction.user.id}`);
-  }
-
   try {
     const custId = interaction.customId.split("_");
     const orderId = custId[0];
@@ -127,6 +120,13 @@ client.on("interactionCreate", async (interaction) => {
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
     console.log(custId, orderId, notifType, buttonId, threadId);
+
+    if (firstClick.has(orderId)) {
+      console.log(`been clicked by ${firstClick[orderId]}`);
+    } else {
+      firstClick.set(orderId, interaction.user.id);
+      console.log(`first click by ${interaction.user.id}`);
+    }
 
     // Click User Validation (Sequence)
     if ( ["confirm", "undo"].includes(buttonId) &&
