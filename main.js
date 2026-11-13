@@ -128,8 +128,8 @@ client.on("interactionCreate", async (interaction) => {
           ephemeral: true,
       });
     } else {
-      firstClick.set(orderId, interaction.user.username);
-      console.log(`first click by ${interaction.user.username}`);
+      firstClick.set(orderId, interaction.user.tag);
+      console.log(`first click by ${interaction.user.tag}`);
     }
     
     // Acknowledge Button Click
