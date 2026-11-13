@@ -123,7 +123,7 @@ client.on("interactionCreate", async (interaction) => {
 
     if (firstClick.has(orderId)) {
       console.log(`been clicked by ${firstClick[orderId]}`);
-      return interaction.reply({
+      return threadId.send({
           content: "This order has been claimed already.",
           ephemeral: true,
       });
