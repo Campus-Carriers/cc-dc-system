@@ -9,7 +9,7 @@ import {
   Client,
   GatewayIntentBits,
 } from 'discord.js';
-import { threadId } from 'node:worker_threads';
+//import { threadId } from 'node:worker_threads';
 
 const app = express();
 
@@ -104,6 +104,7 @@ app.post("/trigger", async (req, res) => {
 // BUTTON INTERACTIONS
 // =========================
 globalThis.firstClick = {};
+console.log(firstClick);
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isButton() && !interaction.isModalSubmit()) return;
@@ -111,6 +112,13 @@ client.on("interactionCreate", async (interaction) => {
   console.log(
     `Button clicked: ${interaction.customId} by ${interaction.user.tag}`
   );
+
+  if (firstClick.has(orderId)) {
+    console.log(`been clicked by ${firstClick[orderId]}`);
+  } else {
+    firstClick.set(orderId, interaction.user.id);
+    console.log(`first click by ${interaction.user.id}`);
+  }
 
   try {
     const custId = interaction.customId.split("_");

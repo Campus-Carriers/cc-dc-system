@@ -8,7 +8,7 @@ import { toSheets } from './toSheets.js';
 import { time } from 'node:console';
 import { ChannelType } from 'discord.js';
 
-const carrierAssignment = new Map();
+const acceptedOrders = new Map();
 
 export function interactions(notifType, buttonId, orderId, interaction, threadId) {
     // Get the Message Interacted With
@@ -25,13 +25,11 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     const interactions = {
         "new" : {
             "accept" : async () => {
-                // Set Assigned Carrier
-                if (carrierAssignment.has(orderId)) {
+                if (acceptedOrders.has(orderId)) {
+                    await interaction.editReply("This order has already been accepted.");
                     return;
                 }
-                else {
-                    carrierAssignment[orderId] = interaction.user;
-                }
+                acceptedOrders.set(orderId, carrier.id);
 
                 // Send Interaction Notif
                 console.log(`Carrier ${carrier} is on the way`);
