@@ -194,7 +194,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log("showing surcharge prompt");
 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:');
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
             },
             "confirm" : async () => { 
                 // Send Interaction Notif
@@ -230,11 +230,12 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
         "surchargeModal" : async () => {
             console.log('in surcharge modal');
             var selectedSurcharges = interaction.fields.getCheckboxGroup('surchargeCheckboxes');
-            var surchargeContent = `Surcharges applied: ${selectedSurcharges.join(', ')}`;
-            console.log(surchargeContent);
+            var surchargeContent = `${selectedSurcharges.join(', ')}`;
+            var surchargeMessage = `Surcharges applied: ${surchargeContent}`
+            console.log(surchargeMessage);
 
             await interaction.editReply({
-                content: surchargeContent
+                content: surchargeMessage
             });
             console.log('after edit reply');
 
@@ -246,7 +247,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                         carrier: carrier.username,
                         threadId: threadId,
                         info: {
-                            surchargeInfo: selectedSurcharges || 'error',
+                            surchargeInfo: surchargeContent || 'error',
                         },
                     }
             };
