@@ -9,7 +9,7 @@ import {
   Client,
   GatewayIntentBits,
 } from 'discord.js';
-import { threadId } from 'node:worker_threads';
+//import { threadId } from 'node:worker_threads';
 
 const app = express();
 
@@ -103,7 +103,8 @@ app.post("/trigger", async (req, res) => {
 // =========================
 // BUTTON INTERACTIONS
 // =========================
-globalThis.firstClick = {};
+globalThis.firstClick = new Map();
+console.log(firstClick);
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isButton() && !interaction.isModalSubmit()) return;
@@ -118,10 +119,29 @@ client.on("interactionCreate", async (interaction) => {
     const notifType = custId[1];
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
+    console.log(`THREADID: ${threadId}`);
     console.log(custId, orderId, notifType, buttonId, threadId);
 
+    if (firstClick.has(orderId)) {
+      console.log(`been clicked by ${firstClick[orderId]}`);
+      return threadId.send({
+          content: "This order has been claimed already.",
+          ephemeral: true,
+      });
+    } else {
+      firstClick.set(orderId, interaction.user.tag);
+      console.log(`first click by ${interaction.user.tag}`);
+    }
+    
     // Acknowledge Button Click
-    if (notifType !== "price" && buttonId !== "surcharge") { await interaction.deferReply(); }
+    const opensModal =
+      (notifType === "bought/done" && buttonId === "confirm") ||
+      (notifType === "arrived" && buttonId === "confirm") ||
+      (notifType === "delivered" && buttonId === "confirm") ||
+      (buttonId === "remarks");
+    if (!opensModal) {
+      await interaction.deferReply();
+    }
 
 ////// ACT ON BUTTON CLICK - based on notif type
     console.log(`${notifType}+${buttonId}`);
@@ -131,11 +151,17 @@ client.on("interactionCreate", async (interaction) => {
   } catch (error) {
     console.error("Button interaction error:", error);
 
-    if (interaction.deferred || interaction.replied) {
-      await interaction.reply({
-        content: "❌ Something went wrong.",
-        ephemeral: true,
-      });
+    const errorResponse = {
+      content: "❌ Something went wrong.",
+      ephemeral: true,
+    };
+
+    if (interaction.deferred) {
+      await interaction.editReply(errorResponse);
+    } else if (interaction.replied) {
+      await interaction.followUp(errorResponse);
+    } else {
+      await interaction.reply(errorResponse);
     }
   }
 });

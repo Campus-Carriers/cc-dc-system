@@ -27,15 +27,16 @@ export function commands(channel, res, orderId, notifType, info) {
             title = "Order Update: Dispatch";
             buttons = [
                 // Id, Label, Style, Disabled
-                [`${orderId}_dispatch_dispatched_${channelId}`,"Carrier Dispatched","Success",false],
-                [`${orderId}_dispatch_undo_${channelId}`,"Undo","Secondary",true],
+                [`${orderId}_dispatch_dispatched_${channel}`,"Carrier Dispatched","Success",false],
+                [`${orderId}_dispatch_confirm_${channel}`,"Confirm","Secondary",true]
+                [`${orderId}_dispatch_undo_${channel}`,"Undo","Secondary",true],
                 [`${orderId}_dispatch_surcharge_${channelId}`,"Surcharge","Secondary",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
         "update_boughtOrDone" : () => {
             console.log(`channel: ${channel}`);
-            message = "Errand done:";
+            message = "Press the button below once you have bought the order or accomplished the errand.";
             title = "Order Update: Errand Accomplished";
             buttons = [
                 // Id, Label, Style, Disabled
@@ -46,7 +47,6 @@ export function commands(channel, res, orderId, notifType, info) {
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "orderPrice" : () => {},
         "surcharge" : () => {
             console.log(`channel: ${channel}`);
             console.log('Surcharge prompted');
@@ -61,9 +61,49 @@ export function commands(channel, res, orderId, notifType, info) {
 
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "update_arrived" : () => {},
+        "update_arrived" : () => {
+            // Send Price Breakdown
+            channel.send(`Here is the order's Price Breakdown:\n${info.body.priceBreakdown}`);
+
+            // Send Arrived at Delivery Location Prompt
+            message = `Press the button below once you have arrived at the delivery address: ${info.body.deliveryLoc}.`;
+            title = "Order Update: Arrived at Delivery Location";
+            buttons = [
+                // Id, Label, Style, Disabled
+                [`${orderId}_arrived_arrived_${channelId}`,"Arrived","Primary",false],
+                [`${orderId}_arrived_confirm_${channelId}`,"Confirm","Secondary",true],
+                [`${orderId}_arrived_undo_${channelId}`,"Undo","Secondary",true],
+            ];
+            sendMessage(channel, res, title, message, color, buttons);
+            console.log(`THREADID: ${channelId}`);
+        },
+        "update_delivered" : () => {
+            // Send Arrived at Delivery Location Prompt
+            message = `Press the button below once you have handed over the order.`;
+            title = "Order Update: Order Delivered";
+            buttons = [
+                // Id, Label, Style, Disabled
+                [`${orderId}_delivered_delivered_${channelId}`,"Arrived","Primary",false],
+                [`${orderId}_delivered_confirm_${channelId}`,"Confirm","Secondary",true],
+                [`${orderId}_delivered_undo_${channelId}`,"Undo","Secondary",true],
+            ];
+            sendMessage(channel, res, title, message, color, buttons);
+        },
         "update_delivered" : () => {},
-        "remarks" : () => {},
+        "remarks" : () => {
+            console.log(`channel: ${channel}`);
+            console.log('Remarks prompted');
+
+            message = "Please click the Remarks button to input any comments or remarks from you, the carrier, or from the customer.";
+            title = "Customer and Carrier Remarks";
+            buttons = [
+                [`${orderId}_remarks_remarks_${channelId}`,"Remarks","Secondary",false],
+                [`${orderId}_remarks_confirm_${channelId}`,"Confirm","Secondary",false],
+                [`${orderId}_remarks_undo_${channelId}`,"Undo","Secondary",true]
+            ];
+
+            sendMessage(channel, res, title, message, color, buttons);
+        },
     };
     return(commands[notifType]);
 }

@@ -1,4 +1,31 @@
-import { EmbedBuilder } from 'discord.js';
+import {
+  ModalBuilder, 
+  FileUploadBuilder,
+  LabelBuilder,
+} from 'discord.js';
+
+export async function imagePrompt(orderId, interaction, notifType, title) {
+  const modal = new ModalBuilder()
+      .setCustomId(`${orderId}_${notifType}_imagePromptModal_${interaction.channel}`)
+      .setTitle(`Image Proof: ${title}`);
+  
+  const fileUpload = new FileUploadBuilder()
+      .setCustomId('imageInput')
+      .setMinValues(1)
+      .setMaxValues(1)
+      .setRequired(true);
+
+  const imageLabel = new LabelBuilder()
+      .setLabel("Send Image Proof of Order Update:")
+      .setDescription("For images with the customer, ask for consent!! Notify them that it will be sent to the CC database.")
+      .setFileUploadComponent(fileUpload);
+  
+  modal.addLabelComponents(imageLabel);
+
+  await interaction.showModal(modal);
+}
+
+/*import { EmbedBuilder } from 'discord.js';
 
 export async function imagePrompt(user, channel, picType) {
     //--Message
@@ -43,4 +70,4 @@ export async function imagePrompt(user, channel, picType) {
 
         return null;
     }
-}
+}*/
