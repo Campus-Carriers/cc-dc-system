@@ -119,6 +119,7 @@ client.on("interactionCreate", async (interaction) => {
     const notifType = custId[1];
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
+    console.log(`THREADID: ${threadId}`);
     console.log(custId, orderId, notifType, buttonId, threadId);
 
     if (firstClick.has(orderId)) {
