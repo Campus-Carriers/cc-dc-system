@@ -27,8 +27,9 @@ export function commands(channel, res, orderId, notifType, info) {
             title = "Order Update: Dispatch";
             buttons = [
                 // Id, Label, Style, Disabled
-                [`${orderId}_dispatch_dispatched_${channelId}`,"Carrier Dispatched","Success",false],
-                [`${orderId}_dispatch_undo_${channelId}`,"Undo","Secondary",true]
+                [`${orderId}_dispatch_dispatched_${channel}`,"Carrier Dispatched","Success",false],
+                [`${orderId}_dispatch_confirm_${channel}`,"Confirm","Secondary",true]
+                [`${orderId}_dispatch_undo_${channel}`,"Undo","Secondary",true]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },

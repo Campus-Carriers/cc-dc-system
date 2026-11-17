@@ -5,7 +5,6 @@ import { newButtons } from './prompt commands/newButtons.js';
 import { pricePrompt } from './prompt commands/pricePrompt.js';
 import { imagePrompt } from './prompt commands/imagePrompt.js';
 import { toSheets } from './toSheets.js';
-import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
 import { ChannelType } from 'discord.js';
 
@@ -26,16 +25,12 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "accept" : async () => {
                 // Send Interaction Notif
                 console.log(`Carrier ${carrier} is on the way`);
-                await interaction.editReply("You have accepted the order");
+                await interaction.editReply(`Errand ✅ Accepted by ${carrier}`);
 
                 // Disable Button/s
                 // TODO: make limiter
                 await message.edit({
                 components: newButtons(message, [0,1]),
-                });
-
-                await interaction.followUp({
-                    content: `Errand ✅ Accepted by ${carrier}`
                 });
 
                 // Create Private Thread with Carrier and EBs
@@ -72,25 +67,20 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "dispatched" : async () => {
                 // Send Interaction Notif
                 await interaction.editReply({ 
-                    content: `Carrier ${interaction.user} Dispatched ✅ for ${orderId} ` 
+                    content: `Please Confirm [?] Acceptance of Order  ${orderId}, Carrier ${interaction.user}` 
                 });
-                
-                console.log("pre clear");
-                // Clear timeOut
-                if (timeOut) {
-                    clearTimeout(timeOut);
-                    console.log("time cleared");
-                }
 
                 // Disable Dispatched Button
                 await message.edit({
                     components: newButtons(message, [0]),
                 });
+            },
+            "confirm" : async () => {
+                console.log(`dispatch confirm`);
 
-                // Wait 15 seconds before disabling undo
-                timeOut = await setTimeout(15000);
-                message.edit({
-                    components: newButtons(message, [0,1]),
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
                 });
 
                 // Send Info to Apps Script, Trigger Errand Done

@@ -9,7 +9,7 @@ import {
   Client,
   GatewayIntentBits,
 } from 'discord.js';
-import { threadId } from 'node:worker_threads';
+//import { threadId } from 'node:worker_threads';
 
 const app = express();
 
@@ -103,7 +103,8 @@ app.post("/trigger", async (req, res) => {
 // =========================
 // BUTTON INTERACTIONS
 // =========================
-globalThis.firstClick = {};
+globalThis.firstClick = new Map();
+console.log(firstClick);
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isButton() && !interaction.isModalSubmit()) return;
@@ -119,6 +120,18 @@ client.on("interactionCreate", async (interaction) => {
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
     console.log(`THREADID: ${threadId}`);
+    console.log(custId, orderId, notifType, buttonId, threadId);
+
+    if (firstClick.has(orderId)) {
+      console.log(`been clicked by ${firstClick[orderId]}`);
+      return threadId.send({
+          content: "This order has been claimed already.",
+          ephemeral: true,
+      });
+    } else {
+      firstClick.set(orderId, interaction.user.tag);
+      console.log(`first click by ${interaction.user.tag}`);
+    }
     
     // Acknowledge Button Click
     const opensModal =
