@@ -4,6 +4,7 @@
 import { newButtons } from './prompt commands/newButtons.js';
 import { pricePrompt } from './prompt commands/pricePrompt.js';
 import { imagePrompt } from './prompt commands/imagePrompt.js';
+import { surchargePrompt } from './prompt commands/surchargePrompt.js';
 import { remarksPrompt } from './prompt commands/remarksPrompt.js';
 import { toSheets } from './toSheets.js';
 import { time } from 'node:console';
@@ -109,6 +110,13 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 content: `Carrier Dispatch ❌ Undone by ${interaction.user}`
                 });
             },
+            "surcharge" : async () => {
+                console.log("showing surcharge prompt");
+                console.log(`Order ID: ${orderId}`);
+
+                // Show Surcharge Modal
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+            },
         },
         "bought/done" : {
             "done" : async () => {
@@ -128,7 +136,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Disable Button/s
                 await message.edit({
-                    components: newButtons(message, [0,1,2]),
+                    components: newButtons(message, [0,1,2,3]),
                 });
 
                 // Image & Price Prompt
@@ -228,6 +236,82 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 content: `Arrival ❌ Undone by ${interaction.user}`
                 });
             },
+            "surcharge" : async () => {
+                console.log("showing surcharge prompt");
+                
+                // Show Surcharge Modal
+                surchargePrompt(interaction, 'Select Applicable Surcharge:');
+            },
+        },
+        "orderPrice" : async () => {},
+        "surcharge" : {
+            "surcharge" : async () => {
+                console.log("showing surcharge prompt");
+
+                // Show Surcharge Modal
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+            },
+            "confirm" : async () => { 
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Please Confirm [?] Applicable Surcharges, Carrier ${interaction.user}. You 15 seconds to undo your confirmation by clicking the Undo button.`
+                });
+                console.log(`surcharge`);
+
+                // Disable Bought/Done Button
+                await message.edit({
+                    components: newButtons(message, [0,1]),
+                });
+
+                // wait 15 seconds before disabling undo
+                timeOut = await setTimeout(15000);
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+            },
+            "undo" : async () => {
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Order Surcharge ❌ Undone by ${interaction.user}`
+                });
+            },
+        },
+        "surchargeModal" : async () => {
+            console.log('in surcharge modal');
+            var selectedSurcharges = interaction.fields.getCheckboxGroup('surchargeCheckboxes');
+            var surchargeContent = `${selectedSurcharges.join(', ')}`;
+            var surchargeMessage = `Surcharges applied: ${surchargeContent}`
+            console.log(surchargeMessage);
+
+            await interaction.editReply({
+                content: surchargeMessage
+            });
+            console.log('after edit reply');
+
+            payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            surchargeInfo: surchargeContent || 'error',
+                        },
+                    }
+            };
+            toSheets(payload);
+        },
+        "arrived" : {
+            "arrived" : async () => {},
+            "confirm" : async () => {},
+            "undo" : async () => {},
         },
         "delivered" : {
             "delivered" : async () => {

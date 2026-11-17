@@ -29,7 +29,8 @@ export function commands(channel, res, orderId, notifType, info) {
                 // Id, Label, Style, Disabled
                 [`${orderId}_dispatch_dispatched_${channel}`,"Carrier Dispatched","Success",false],
                 [`${orderId}_dispatch_confirm_${channel}`,"Confirm","Secondary",true]
-                [`${orderId}_dispatch_undo_${channel}`,"Undo","Secondary",true]
+                [`${orderId}_dispatch_undo_${channel}`,"Undo","Secondary",true],
+                [`${orderId}_dispatch_surcharge_${channelId}`,"Surcharge","Secondary",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
@@ -41,11 +42,25 @@ export function commands(channel, res, orderId, notifType, info) {
                 // Id, Label, Style, Disabled
                 [`${orderId}_bought/done_done_${channelId}`,"Errand Done","Success",false],
                 [`${orderId}_bought/done_confirm_${channelId}`,"Confirm","Secondary",true],
-                [`${orderId}_bought/done_undo_${channelId}`,"Undo","Secondary",true]
+                [`${orderId}_bought/done_undo_${channelId}`,"Undo","Secondary",true],
+                [`${orderId}_bought/done_surcharge_${channelId}`,"Surcharge","Secondary",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "surcharge" : () => {},
+        "surcharge" : () => {
+            console.log(`channel: ${channel}`);
+            console.log('Surcharge prompted');
+
+            message = "Please click the Surcharge button to apply any applicable surcharges.";
+            title = "Applicable Surcharges";
+            buttons = [
+                [`${orderId}_surcharge_surcharge_${channelId}`,"Surcharge","Secondary",false],
+                [`${orderId}_surcharge_confirm_${channelId}`,"Confirm","Secondary",false],
+                [`${orderId}_surcharge_undo_${channelId}`,"Undo","Secondary",true]
+            ];
+
+            sendMessage(channel, res, title, message, color, buttons);
+        },
         "update_arrived" : () => {
             // Send Price Breakdown
             channel.send(`Here is the order's Price Breakdown:\n${info.body.priceBreakdown}`);
