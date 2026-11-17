@@ -27,8 +27,9 @@ export function commands(channel, res, orderId, notifType, info) {
             title = "Order Update: Dispatch";
             buttons = [
                 // Id, Label, Style, Disabled
-                [`${orderId}_dispatch_dispatched_${channelId}`,"Carrier Dispatched","Success",false],
-                [`${orderId}_dispatch_undo_${channelId}`,"Undo","Secondary",true]
+                [`${orderId}_dispatch_dispatched_${channel}`,"Carrier Dispatched","Success",false],
+                [`${orderId}_dispatch_confirm_${channel}`,"Confirm","Secondary",true]
+                [`${orderId}_dispatch_undo_${channel}`,"Undo","Secondary",true]
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
@@ -57,6 +58,19 @@ export function commands(channel, res, orderId, notifType, info) {
                 [`${orderId}_arrived_arrived_${channelId}`,"Arrived","Primary",false],
                 [`${orderId}_arrived_confirm_${channelId}`,"Confirm","Secondary",true],
                 [`${orderId}_arrived_undo_${channelId}`,"Undo","Secondary",true],
+            ];
+            sendMessage(channel, res, title, message, color, buttons);
+            console.log(`THREADID: ${channelId}`);
+        },
+        "update_delivered" : () => {
+            // Send Arrived at Delivery Location Prompt
+            message = `Press the button below once you have handed over the order.`;
+            title = "Order Update: Order Delivered";
+            buttons = [
+                // Id, Label, Style, Disabled
+                [`${orderId}_delivered_delivered_${channelId}`,"Arrived","Primary",false],
+                [`${orderId}_delivered_confirm_${channelId}`,"Confirm","Secondary",true],
+                [`${orderId}_delivered_undo_${channelId}`,"Undo","Secondary",true],
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
