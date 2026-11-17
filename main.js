@@ -103,8 +103,7 @@ app.post("/trigger", async (req, res) => {
 // =========================
 // BUTTON INTERACTIONS
 // =========================
-globalThis.firstClick = new Map();
-console.log(firstClick);
+const firstClick = new Map();
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isButton() && !interaction.isModalSubmit()) return;
@@ -121,16 +120,21 @@ client.on("interactionCreate", async (interaction) => {
     const threadId = custId.length == 4 ? custId[3] : custId[2];
     console.log(custId, orderId, notifType, buttonId, threadId);
 
-    if (firstClick.has(orderId)) {
-      console.log(`been clicked by ${firstClick[orderId]}`);
-      return threadId.send({
+    // Only the first new-order Accept click claims the order.
+    if (notifType === "new" && buttonId === "accept") {
+      if (firstClick.has(orderId)) {
+        console.log(`Order ${orderId} was already claimed by ${firstClick.get(orderId)}`);
+        return await interaction.reply({
           content: "This order has been claimed already.",
           ephemeral: true,
-      });
-    } else {
-      firstClick.set(orderId, interaction.user.tag);
-      console.log(`first click by ${interaction.user.tag}`);
+        });
+      }
+
+      firstClick.set(orderId, interaction.user.id);
+      console.log(`Order ${orderId} first accepted by ${interaction.user.tag}`);
     }
+
+    // Check User Validity: Carrier Account
     
     // Acknowledge Button Click
     const opensModal =
