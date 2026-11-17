@@ -4,6 +4,8 @@
 import { newButtons } from './prompt commands/newButtons.js';
 import { pricePrompt } from './prompt commands/pricePrompt.js';
 import { imagePrompt } from './prompt commands/imagePrompt.js';
+import { surchargePrompt } from './prompt commands/surchargePrompt.js';
+import { remarksPrompt } from './prompt commands/remarksPrompt.js';
 import { toSheets } from './toSheets.js';
 import { time } from 'node:console';
 import { ChannelType } from 'discord.js';
@@ -108,6 +110,13 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 content: `Carrier Dispatch ❌ Undone by ${interaction.user}`
                 });
             },
+            "surcharge" : async () => {
+                console.log("showing surcharge prompt");
+                console.log(`Order ID: ${orderId}`);
+
+                // Show Surcharge Modal
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+            },
         },
         "bought/done" : {
             "done" : async () => {
@@ -127,7 +136,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Disable Button/s
                 await message.edit({
-                    components: newButtons(message, [0,1,2]),
+                    components: newButtons(message, [0,1,2,3]),
                 });
 
                 // Image & Price Prompt
@@ -197,7 +206,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "imagePromptModal" : async () => {
                 const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
 
-                // Send Info to Apps Script (Image Proof, Errand Price), Trigger Errand Done
+                // Send Info to Apps Script (Image Proof,), Trigger Order Delivery
                 payload = {
                     action: notifType,
                     orderId: orderId,
@@ -227,13 +236,209 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 content: `Arrival ❌ Undone by ${interaction.user}`
                 });
             },
+            "surcharge" : async () => {
+                console.log("showing surcharge prompt");
+                
+                // Show Surcharge Modal
+                surchargePrompt(interaction, 'Select Applicable Surcharge:');
+            },
         },
-        "delivered" : {
-            "delivered" : async () => {},
+        "orderPrice" : async () => {},
+        "surcharge" : {
+            "surcharge" : async () => {
+                console.log("showing surcharge prompt");
+
+                // Show Surcharge Modal
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+            },
+            "confirm" : async () => { 
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Please Confirm [?] Applicable Surcharges, Carrier ${interaction.user}. You 15 seconds to undo your confirmation by clicking the Undo button.`
+                });
+                console.log(`surcharge`);
+
+                // Disable Bought/Done Button
+                await message.edit({
+                    components: newButtons(message, [0,1]),
+                });
+
+                // wait 15 seconds before disabling undo
+                timeOut = await setTimeout(15000);
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+            },
+            "undo" : async () => {
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Order Surcharge ❌ Undone by ${interaction.user}`
+                });
+            },
+        },
+        "surchargeModal" : async () => {
+            console.log('in surcharge modal');
+            var selectedSurcharges = interaction.fields.getCheckboxGroup('surchargeCheckboxes');
+            var surchargeContent = `${selectedSurcharges.join(', ')}`;
+            var surchargeMessage = `Surcharges applied: ${surchargeContent}`
+            console.log(surchargeMessage);
+
+            await interaction.editReply({
+                content: surchargeMessage
+            });
+            console.log('after edit reply');
+
+            payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            surchargeInfo: surchargeContent || 'error',
+                        },
+                    }
+            };
+            toSheets(payload);
+        },
+        "arrived" : {
+            "arrived" : async () => {},
             "confirm" : async () => {},
             "undo" : async () => {},
         },
-        "remarks" : () => {},
+        "delivered" : {
+            "delivered" : async () => {
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Please Confirm [?] Delivery, Carrier ${interaction.user}`
+                });
+                console.log(`delivered`);
+
+                // Disable Bought/Done Button
+                await message.edit({
+                    components: newButtons(message, [0]),
+                });
+            },
+            "confirm" : async () => {
+                console.log(`confirm`);
+
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+                
+                // Image Prompt
+                await imagePrompt(orderId, interaction, notifType, "Order Delivery");
+            },
+            "imagePromptModal" : async () => {
+                const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
+
+                console.log(`THREADID: ${threadId}`);
+                // Send Info to Apps Script (Image Proof), Trigger Customer Remarks
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            imageProof: imageProof.url,
+                        },
+                    }
+                };
+                await toSheets(payload);
+                
+                // Send Interaction Notif
+                await interaction.editReply(`Delivery ✅ Confirmed with: Image Proof ${imageProof.name}.`);
+            },
+            "undo" : async () => {
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [1,2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Arrival ❌ Undone by ${interaction.user}`
+                });
+            },
+        },
+        "remarks" : {
+            "remarks" : async () => {
+                console.log("showing remarks prompt");
+
+                // Show Surcharge Modal
+                remarksPrompt(interaction, orderId);
+            },
+            "confirm" : async () => { 
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Please Confirm [?] The Remarks, Carrier ${interaction.user}. You 15 seconds to undo your confirmation by clicking the Undo button.`
+                });
+                console.log(`remarks`);
+
+                // Disable Bought/Done Button
+                await message.edit({
+                    components: newButtons(message, [0,1]),
+                });
+
+                // wait 15 seconds before disabling undo
+                timeOut = await setTimeout(15000);
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+            },
+            "undo" : async () => {
+                console.log(`undo`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Remarks ❌ Undone by ${interaction.user}`
+                });
+            },
+        },
+        "remarksModal" : async () => {
+            console.log('in remarks modal');
+            var customerRemarks = interaction.fields.getTextInputValue('customerRemarks');
+            var carrierRemarks = interaction.fields.getTextInputValue('carrierRemarks');
+            var remarksContent = `**Carrier to Customer Remarks:**   ${customerRemarks}
+            
+**Customer to Carrier Remarks:**   ${carrierRemarks}`;
+            console.log(remarksContent);
+
+            await interaction.editReply({
+                content: remarksContent
+            });
+            console.log('after edit reply of remarksContent');
+
+            payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            customerRemarks: customerRemarks || 'error',
+                            carrierRemarks: carrierRemarks || 'error',
+                        },
+                    }
+            };
+            toSheets(payload);
+        },
     };
 
     try {
