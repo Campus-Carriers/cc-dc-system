@@ -20,6 +20,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     // Get Carrier
     const carrier = interaction.user;
     var payload;
+    console.log(`order ID: ${orderId}`);
     
     const interactions = {
         "new" : {
@@ -84,7 +85,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     components: newButtons(message, [0,1,2,3]),
                 });
 
-                console.log(orderId);
+                console.log(`order ID: ${orderId}`);
                 // Send Info to Apps Script, Trigger Errand Done
                 payload = {
                     action: notifType,
