@@ -73,7 +73,8 @@ export function commands(channel, res, orderId, notifType, info) {
 Carrier Name: ${info.body.carName}**
 > Time Carrier Dispatched: ${info.body.timeDis}
 > Time Bought Order: ${info.body.timeBought}
-> Time deliver to customer: ${info.body.timeDel}
+> Time Arrived at Location: ${info.body.timeArri}
+> Time Delivered to Customer: ${info.body.timeDel}
 > Customer Remarks from Carrier: ${info.body.cusRemarks}
 > Carrier Remarks from Customer: ${info.body.carRemarks}
 Pricing (Total - CC:Carrier): ${info.body.priceBreakdown}

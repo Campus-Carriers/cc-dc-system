@@ -5,7 +5,7 @@ import {
   LabelBuilder,  
 } from 'discord.js';
 
-export async function editPostLogInfo(interaction, orderId, delivLoc, cusName, timeDis, timeBought, timeDel) {
+export async function editPostLogInfo(interaction, orderId, delivLoc, timeDis, timeBought, timeArri, timeDel) {
   try {
     const modal = new ModalBuilder()
         .setCustomId(`${orderId}_postLogInfoModal`)
@@ -15,11 +15,6 @@ export async function editPostLogInfo(interaction, orderId, delivLoc, cusName, t
                                 'Edit the delivery location here (leave blank if no change)...', 
                                 'Edit the Delivery Location: ', 
                                 `Current Delivery Location: ${delivLoc}`
-                            );
-    const editCustomerName = makeLabel('customerName', 
-                                'Edit the customer name here (leave blank if no change)...', 
-                                'Edit the Customer Name: ', 
-                                `Current Customer Name: ${cusName}`
                             );
     const editTimeDispatched = makeLabel('timeDispatched', 
                                 'Format: "MM/DD/YYYY hh:mm AM/PM" (leave blank if no change)...', 
@@ -31,13 +26,18 @@ export async function editPostLogInfo(interaction, orderId, delivLoc, cusName, t
                                 'Edit Your Time Bought: ', 
                                 `Current Time Bought: ${timeBought}`
                             );
+    const editTimeArrived = makeLabel('timeArrived', 
+                                'Format: "MM/DD/YYYY hh:mm AM/PM" (leave blank if no change)...', 
+                                'Edit Your Time Arrived: ', 
+                                `Current Time Arrived: ${timeArri}`
+                            );
     const editTimeDelivered = makeLabel('timeDelivered', 
                                 'Format: "MM/DD/YYYY hh:mm AM/PM" (leave blank if no change)...', 
                                 'Edit Your Time Delivered: ', 
                                 `Current Time Delivered: ${timeDel}`
                             );
     
-    modal.addLabelComponents(editDelivLoc, editCustomerName, editTimeDispatched, editTimeBought, editTimeDelivered);
+    modal.addLabelComponents(editDelivLoc, editTimeDispatched, editTimeBought, editTimeArrived, editTimeDelivered);
 
     await interaction.showModal(modal);
   } catch (err) {

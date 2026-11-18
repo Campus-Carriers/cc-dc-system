@@ -322,15 +322,15 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             const getVal = (id) => interaction.fields.getTextInputValue(id) || "none";
 
             const delivLoc = getVal('deliveryLocation');
-            const cusName = getVal('customerName');
             const timeDis = getVal('timeDispatched');
             const timeBought = getVal('timeBought');
+            const timeArri = getVal('timeArrived');
             const timeDel = getVal('timeDelivered');
 
             console.log(`Inputted Delivery Location: ${delivLoc}`);
-            console.log(`Inputted Customer Name: ${cusName}`);
             console.log(`Inputted Time Dispatched: ${timeDis}`);
             console.log(`Inputted Time Bought: ${timeBought}`);
+            console.log(`Inputted Time Arrived: ${timeArri}`);
             console.log(`Inputted Time Delivered: ${timeDel}`);
 
             // Send Info to Apps Script, Trigger Errand Done
@@ -343,9 +343,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                         threadId: threadId,
                         info: {
                             delivLoc: delivLoc || 'error',
-                            customerName: cusName  || 'error',
                             timeDispatched: timeDis || 'error',
                             timeBought: timeBought || 'error',
+                            timeArrived: timeArri || 'error',
                             timeDelivered: timeDel || 'error',
                         },
                     }
