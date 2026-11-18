@@ -22,17 +22,17 @@ export async function editPostLogInfo(interaction, orderId, delivLoc, cusName, t
                                 `Current Customer Name: ${cusName}`
                             );
     const editTimeDispatched = makeLabel('timeDispatched', 
-                                'Edit your time dispatched here (leave blank if no change)...', 
+                                'Format: "MM/DD/YYYY hh:mm AM/PM" (leave blank if no change)...', 
                                 'Edit Your Time Dispatched: ', 
                                 `Current Time Dispatched: ${timeDis}`
                             );
     const editTimeBought = makeLabel('timeBought', 
-                                'Edit your time bought here (leave blank if no change)...', 
+                                'Format: "MM/DD/YYYY hh:mm AM/PM" (leave blank if no change)...', 
                                 'Edit Your Time Bought: ', 
                                 `Current Time Bought: ${timeBought}`
                             );
     const editTimeDelivered = makeLabel('timeDelivered', 
-                                'Edit your time delivered here (leave blank if no change)...', 
+                                'Format: "MM/DD/YYYY hh:mm AM/PM" (leave blank if no change)...', 
                                 'Edit Your Time Delivered: ', 
                                 `Current Time Delivered: ${timeDel}`
                             );
