@@ -9,6 +9,8 @@ export function commands(channel, res, orderId, notifType, info) {
     var title;
     var buttons;
     const channelId = channel.id;
+    
+    console.log(`order ID commands: ${orderId}`);
     const commands = {
         "newOrder" : () => {
             console.log(`channel: ${channel}`);

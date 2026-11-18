@@ -85,7 +85,7 @@ app.post("/trigger", async (req, res) => {
     }
     console.log("chnl check 2");
 
-    console.log("erm");
+    console.log(`erm + ${orderId}`);
 ////// SEND PROMPT - based on trigger notif type
     var action = commands(channel, res, orderId, notifType, info);
     action();
@@ -119,7 +119,7 @@ client.on("interactionCreate", async (interaction) => {
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
     console.log(`THREADID: ${threadId}`);
-    console.log(custId, orderId, notifType, buttonId, threadId);
+    console.log(interaction.customId, orderId, notifType, buttonId, threadId);
 
     // Only the first new-order Accept click claims the order.
     if (notifType === "new" && buttonId === "accept") {
