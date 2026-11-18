@@ -83,6 +83,7 @@ Pricing (Total - CC:Carrier): ${info.body.priceBreakdown}
                 [`${orderId}_postLog_editInfo_${channelId}`,"Edit Info","Secondary",false],
                 [`${orderId}_postLog_editRemarks_${channelId}`,"Edit Remarks","Secondary",false],
                 [`${orderId}_postLog_confirm_${channelId}`,"Confirm","Secondary",false],
+                [`${orderId}_postLog_sure_${channelId}`,"I'm Sure","Secondary",true],
                 [`${orderId}_postLog_undo_${channelId}`,"Undo","Secondary",true]
             ];
 

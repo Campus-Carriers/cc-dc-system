@@ -10,7 +10,7 @@ import { setTimeout } from 'node:timers/promises';
 import { time } from 'node:console';
 import { ChannelType } from 'discord.js';
 
-export function interactions(notifType, buttonId, orderId, interaction, threadId) {
+export function interactions(notifType, buttonId, orderId, interaction, threadId, client) {
     // Get the Message Interacted With
     const message = interaction.message;
     // Get the Channel to Send the Prompts to (should specify thread also eventually)
@@ -273,16 +273,36 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Send Interaction Notif
                 await interaction.editReply({
-                    content: `Post Delivery Log ✅ Confirmed by ${interaction.user}`
+                    content: `Post Delivery Log ✅ Confirmed by ${interaction.user}. Are you sure all information is correct? (Click "I'm Sure" button if sure)`
                 });
 
-                // edit this to send to admin
             },
-            "undo" : async () => { // how will this unsend msg from confirm?? or confirm and done na
-                console.log(`undo`);
+            "sure" : async () => {
+                console.log(`done sure`);
+                console.log(message);
+                console.log(message.embeds[0]);
                 // Disable Button/s
                 await message.edit({
-                components: newButtons(message, [2,3]),
+                    components: newButtons(message, [0,1,2,3,4]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Thank you ${interaction.user} for your wonderful service!`
+                });
+
+                const adminChannelId = "1571843725498515477" // should be in env file
+                const adminChannel = await client.channels.fetch(adminChannelId);
+                adminChannel.send({
+                    content: `Post Delivery Log for order ${orderId} by carrier ${interaction.user}`,
+                    embeds: [message.embeds[0]] || 'error',
+                });
+            },
+            "undo" : async () => { 
+                console.log(`undo post log`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [3,4]),
                 });
 
                 // Send Interaction Notif
@@ -292,23 +312,23 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             },
         },
         "postLogInfoModal" : async () => {
-            console.log('in post log modal');
-            var carName = interaction.fields.getTextInputValue('carName');
-            var cusName = interaction.fields.getTextInputValue('cusName');
-            var timeDis = interaction.fields.getTextInputValue('timeDis');
-            var timeBought = interaction.fields.getTextInputValue('timeBought');
-            var timeDel = interaction.fields.getTextInputValue('timeDel');
-            var carFee = interaction.fields.getTextInputValue('carFee');
+            console.log('in info post log modal');
+            console.log(notifType);
 
-            // check if needed when apps script is made
-            var newMessage = `**Post Delivery Log Information**
-    Carrier Name: ${carName}
-    Customer Name: ${cusName}
-    Time Carrier Dispatched: ${timeDis}
-    Time Bought Order: ${timeBought}
-    Time Delivered to Customer: ${timeDel}
+            const getVal = (id) => interaction.fields.getTextInputValue(id) || "none";
 
-    Total Carrier fee: ${carFee}`;
+            const delivLoc = getVal('deliveryLocation');
+            const cusName = getVal('customerName');
+            const timeDis = getVal('timeDispatched');
+            const timeBought = getVal('timeBought');
+            const timeDel = getVal('timeDelivered');
+
+            console.log(`Inputted Delivery Location: ${delivLoc}`);
+            console.log(`Inputted Customer Name: ${cusName}`);
+            console.log(`Inputted Time Dispatched: ${timeDis}`);
+            console.log(`Inputted Time Bought: ${timeBought}`);
+            console.log(`Inputted Time Delivered: ${timeDel}`);
+
             // Send Info to Apps Script, Trigger Errand Done
                 payload = {
                     action: notifType,
@@ -318,26 +338,28 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                         carrier: carrier.username,
                         threadId: threadId,
                         info: {
-                            carrierName: carName || 'error',
+                            delivLoc: delivLoc || 'error',
                             customerName: cusName  || 'error',
                             timeDispatched: timeDis || 'error',
                             timeBought: timeBought || 'error',
                             timeDelivered: timeDel || 'error',
-                            carrierFee: carFee || 'error',
                         },
                     }
                 };
-                toSheets(payload); // this should trigger the sendAutomatedNotif() again
+                toSheets(payload);
         },
         "postLogRemarksModal" : async () => {
-            console.log('in post log modal');
-            var cusRemarks = interaction.fields.getTextInputValue('cusRemarks');
-            var carRemarks = interaction.fields.getTextInputValue('carRemarks');
+            console.log('in remarks post log modal');
+            console.log(notifType);
 
-            // check if needed when apps script is made
-            var newMessage = `**Post Delivery Log Remarks**
-    Customer Remarks from Carrier: ${cusRemarks}
-    Carrier Remarks from Customer: ${carRemarks}`;
+            const getVal = (id) => interaction.fields.getTextInputValue(id) || "none";
+
+            const cusRemarks = getVal('cusRemarks');
+            const carRemarks = getVal('carRemarks');
+
+            console.log(`Inputted Customer Remarks: ${cusRemarks}`);
+            console.log(`Inputted Carrier Remarks: ${carRemarks}`);
+            
             // Send Info to Apps Script, Trigger Errand Done
                 payload = {
                     action: notifType,
@@ -352,7 +374,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                         },
                     }
                 };
-                toSheets(payload); // this should trigger the sendAutomatedNotif() again
+                toSheets(payload); 
         },
     };
 

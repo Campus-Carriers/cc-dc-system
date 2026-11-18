@@ -132,7 +132,7 @@ client.on("interactionCreate", async (interaction) => {
 
 ////// ACT ON BUTTON CLICK - based on notif type
     console.log(`${notifType}+${buttonId}`);
-    const interact = interactions(notifType, buttonId, orderId, interaction, threadId);
+    const interact = interactions(notifType, buttonId, orderId, interaction, threadId, client);
     await interact();
     console.log(`${notifType}+${buttonId}`);
   } catch (error) {

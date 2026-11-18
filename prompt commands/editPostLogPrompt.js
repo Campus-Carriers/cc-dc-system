@@ -12,27 +12,27 @@ export async function editPostLogInfo(interaction, orderId, delivLoc, cusName, t
         .setTitle("Post Delivery Log Information");
 
     const editDelivLoc = makeLabel('deliveryLocation', 
-                                'Edit the delivery location here...', 
+                                'Edit the delivery location here (leave blank if no change)...', 
                                 'Edit the Delivery Location: ', 
                                 `Current Delivery Location: ${delivLoc}`
                             );
     const editCustomerName = makeLabel('customerName', 
-                                'Edit the customer name here...', 
+                                'Edit the customer name here (leave blank if no change)...', 
                                 'Edit the Customer Name: ', 
                                 `Current Customer Name: ${cusName}`
                             );
     const editTimeDispatched = makeLabel('timeDispatched', 
-                                'Edit your time dispatched here...', 
+                                'Edit your time dispatched here (leave blank if no change)...', 
                                 'Edit Your Time Dispatched: ', 
                                 `Current Time Dispatched: ${timeDis}`
                             );
     const editTimeBought = makeLabel('timeBought', 
-                                'Edit your time bought here...', 
+                                'Edit your time bought here (leave blank if no change)...', 
                                 'Edit Your Time Bought: ', 
                                 `Current Time Bought: ${timeBought}`
                             );
     const editTimeDelivered = makeLabel('timeDelivered', 
-                                'Edit your time delivered here...', 
+                                'Edit your time delivered here (leave blank if no change)...', 
                                 'Edit Your Time Delivered: ', 
                                 `Current Time Delivered: ${timeDel}`
                             );
@@ -53,12 +53,12 @@ export async function editPostLogRemarks(interaction, orderId, cusRemarks, carRe
 
     
     const editCustomerRemarks = makeLabel('cusRemarks', 
-                                'Edit customer remarks from carrier here...', 
+                                'Edit customer remarks from carrier here (leave blank if no change)...', 
                                 'Edit Customer Remarks from Carrier: ', 
                                 `Current Customer Remarks From Carrier: ${cusRemarks}`
                             );
     const editCarrierRemarks = makeLabel('carRemarks', 
-                                'Edit carrier remarks from customer here...', 
+                                'Edit carrier remarks from customer here (leave blank if no change)...', 
                                 'Edit Carrier Remarks from Customer: ', 
                                 `Current Carrier Remarks from Customer: ${carRemarks}`
                             );
