@@ -315,6 +315,10 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             console.log('in info post log modal');
             console.log(notifType);
 
+            interaction.editReply({
+                content: "Updating and fetching your new Post Delivery Log..."
+            });
+
             const getVal = (id) => interaction.fields.getTextInputValue(id) || "none";
 
             const delivLoc = getVal('deliveryLocation');
@@ -351,6 +355,10 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
         "postLogRemarksModal" : async () => {
             console.log('in remarks post log modal');
             console.log(notifType);
+
+            interaction.editReply({
+                content: "Updating and fetching your new Post Delivery Log..."
+            });
 
             const getVal = (id) => interaction.fields.getTextInputValue(id) || "none";
 
