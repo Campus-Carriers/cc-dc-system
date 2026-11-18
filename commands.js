@@ -47,20 +47,6 @@ export function commands(channel, res, orderId, notifType, info) {
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "surcharge" : () => {
-            console.log(`channel: ${channel}`);
-            console.log('Surcharge prompted');
-
-            message = "Please click the Surcharge button to apply any applicable surcharges.";
-            title = "Applicable Surcharges";
-            buttons = [
-                [`${orderId}_surcharge_surcharge_${channelId}`,"Surcharge","Secondary",false],
-                [`${orderId}_surcharge_confirm_${channelId}`,"Confirm","Secondary",false],
-                [`${orderId}_surcharge_undo_${channelId}`,"Undo","Secondary",true]
-            ];
-
-            sendMessage(channel, res, title, message, color, buttons);
-        },
         "update_arrived" : () => {
             // Send Price Breakdown
             channel.send(`Here is the order's Price Breakdown:\n${info.body.priceBreakdown}`);
@@ -73,9 +59,23 @@ export function commands(channel, res, orderId, notifType, info) {
                 [`${orderId}_arrived_arrived_${channelId}`,"Arrived","Primary",false],
                 [`${orderId}_arrived_confirm_${channelId}`,"Confirm","Secondary",true],
                 [`${orderId}_arrived_undo_${channelId}`,"Undo","Secondary",true],
+                [`${orderId}_arrived_surcharge_${channelId}`,"Surcharge","Secondary",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
             console.log(`THREADID: ${channelId}`);
+        },
+        "surcharge" : () => {
+            console.log(`channel: ${channel}`);
+            console.log('Surcharge prompted');
+
+            message = "Please click the Surcharge button to apply any applicable surcharges.";
+            title = "Applicable Surcharges";
+            buttons = [
+                [`${orderId}_surcharge_surcharge_${channelId}`,"Surcharge","Secondary",false],
+                [`${orderId}_surcharge_confirm_${channelId}`,"Confirm","Secondary",false],
+            ];
+
+            sendMessage(channel, res, title, message, color, buttons);
         },
         "update_delivered" : () => {
             // Send Arrived at Delivery Location Prompt
@@ -89,7 +89,6 @@ export function commands(channel, res, orderId, notifType, info) {
             ];
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "update_delivered" : () => {},
         "remarks" : () => {
             console.log(`channel: ${channel}`);
             console.log('Remarks prompted');

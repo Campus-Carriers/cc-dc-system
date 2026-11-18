@@ -19,7 +19,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     var timeNow = Math.floor(Date.now() / 1000); // Current Timestamp in Seconds
     // Get Carrier
     const carrier = interaction.user;
-    var timeOut;
     var payload;
     
     const interactions = {
@@ -82,7 +81,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Disable Button/s
                 await message.edit({
-                    components: newButtons(message, [0,1,2]),
+                    components: newButtons(message, [0,1,2,3]),
                 });
 
                 // Send Info to Apps Script, Trigger Errand Done
@@ -102,7 +101,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
-                components: newButtons(message, [1]),
+                components: newButtons(message, [1,2]),
                 });
 
                 // Send Interaction Notif
@@ -178,7 +177,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
             },
         },
-        "surcharge " : () => {},
         "arrived" : {
             "arrived" : async () => {
                 // Send Interaction Notif
@@ -243,7 +241,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 surchargePrompt(interaction, 'Select Applicable Surcharge:');
             },
         },
-        "orderPrice" : async () => {},
         "surcharge" : {
             "surcharge" : async () => {
                 console.log("showing surcharge prompt");
@@ -307,11 +304,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     }
             };
             toSheets(payload);
-        },
-        "arrived" : {
-            "arrived" : async () => {},
-            "confirm" : async () => {},
-            "undo" : async () => {},
         },
         "delivered" : {
             "delivered" : async () => {
