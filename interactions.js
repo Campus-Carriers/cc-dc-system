@@ -22,7 +22,8 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     // Get Carrier
     const carrier = interaction.user;
     var payload;
-    console.log(`nteraction message: ${message}`);
+    console.log(`interaction message: ${message}`);
+    console.log(`notifType: ${notifType}, buttonId: ${buttonId}`);
     
     const interactions = {
         "new" : {
