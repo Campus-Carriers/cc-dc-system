@@ -22,7 +22,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     // Get Carrier
     const carrier = interaction.user;
     var payload;
-    console.log(`order ID: ${orderId}`);
+    console.log(`nteraction message: ${message}`);
     
     const interactions = {
         "new" : {
@@ -147,7 +147,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 });
 
                 // Image & Price Prompt
-                await pricePrompt(orderId, interaction, notifType, threadId);
+                await pricePrompt(orderId, interaction, notifType, threadId, message);
             },
             "orderPriceModal" : async () => {
                 const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
