@@ -4,9 +4,17 @@ import {
   LabelBuilder,  
 } from 'discord.js';
 
-export async function surchargePrompt(interaction, message, orderId) {
+export async function surchargePrompt(interaction, message, orderId, notifType = "") {
     console.log('executing surcharge prompt');
     console.log(`Order ID: ${orderId}`);
+
+    // Set Custom ID depending on notifType
+    if (notifType) {
+      const custId = `${orderId}_${notifType}_surchargeModal_${interaction.channel.id}`;
+    } else {
+      const custId = `${orderId}_surchargeModal`;
+    }
+
     // surcharge values
     var surchargeValues = [
                     { label: 'Peak Hours', value: 'peakHours', description: '11AM to 2PM and 5PM to 7PM' },
@@ -18,7 +26,7 @@ export async function surchargePrompt(interaction, message, orderId) {
     
     // build modal
     const modal = new ModalBuilder()
-        .setCustomId(`${orderId}_surchargeModal`)
+        .setCustomId(custId)
         .setTitle('Surcharge Options');
 
     // build modal contents

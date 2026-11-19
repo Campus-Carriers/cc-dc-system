@@ -122,7 +122,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`Order ID: ${orderId}`);
 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
             },
         },
         "bought/done" : {
@@ -189,7 +189,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`Order ID: ${orderId}`);
 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
             },
         },
         "arrived" : {
@@ -253,7 +253,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log("showing surcharge prompt");
                 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
             },
         },
         "surcharge" : {
@@ -383,7 +383,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`Order ID: ${orderId}`);
 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
             },
         },
         "remarks" : {
