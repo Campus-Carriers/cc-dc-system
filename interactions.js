@@ -240,7 +240,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log("showing surcharge prompt");
                 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:');
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
             },
         },
         "surcharge" : {
