@@ -184,6 +184,13 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     content: `Errand Accomplishment ❌ Undone by ${interaction.user}`
                 });
             },
+            "surcharge" : async () => {
+                console.log("showing surcharge prompt");
+                console.log(`Order ID: ${orderId}`);
+
+                // Show Surcharge Modal
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
+            },
         },
         "arrived" : {
             "arrived" : async () => {
@@ -370,6 +377,13 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await interaction.editReply({
                 content: `Arrival ❌ Undone by ${interaction.user}`
                 });
+            },
+            "surcharge" : async () => {
+                console.log("showing surcharge prompt");
+                console.log(`Order ID: ${orderId}`);
+
+                // Show Surcharge Modal
+                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
             },
         },
         "remarks" : {
