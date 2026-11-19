@@ -99,8 +99,6 @@ export function commands(channel, res, orderId, notifType, info) {
             title = "Customer and Carrier Remarks";
             buttons = [
                 [`${orderId}_remarks_remarks_${channelId}`,"Remarks","Secondary",false],
-                [`${orderId}_remarks_confirm_${channelId}`,"Confirm","Secondary",false],
-                [`${orderId}_remarks_undo_${channelId}`,"Undo","Secondary",true]
             ];
 
             sendMessage(channel, res, title, message, color, buttons);

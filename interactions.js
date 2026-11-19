@@ -197,7 +197,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Disable Button/s
                 await message.edit({
-                    components: newButtons(message, [0,1,2]),
+                    components: newButtons(message, [0,1,2,3]),
                 });
                 
                 // Image Prompt
@@ -372,37 +372,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Show Surcharge Modal
                 remarksPrompt(interaction, orderId);
-            },
-            "confirm" : async () => { 
-                // Send Interaction Notif
-                await interaction.editReply({
-                    content: `Please Confirm [?] The Remarks, Carrier ${interaction.user}. You 15 seconds to undo your confirmation by clicking the Undo button.`
-                });
-                console.log(`remarks`);
-
-                // Disable Bought/Done Button
-                await message.edit({
-                    components: newButtons(message, [0,1]),
-                });
-
-                // wait 15 seconds before disabling undo
-                timeOut = await setTimeout(15000);
-                await message.edit({
-                    components: newButtons(message, [0,1,2]),
-                });
-            },
-            "undo" : async () => {
-                console.log(`undo`);
-                // Disable Button/s
-                await message.edit({
-                components: newButtons(message, [2]),
-                });
-
-                // Send Interaction Notif
-                await interaction.editReply({
-                content: `Remarks ❌ Undone by ${interaction.user}`
-                });
-            },
+            }
         },
         "remarksModal" : async () => {
             console.log('in remarks modal');
