@@ -8,6 +8,7 @@ import { surchargePrompt } from './prompt commands/surchargePrompt.js';
 import { remarksPrompt } from './prompt commands/remarksPrompt.js';
 import { toSheets } from './toSheets.js';
 import { time } from 'node:console';
+import { setTimeout } from 'node:timers/promises';
 import { ChannelType } from 'discord.js';
 
 export function interactions(notifType, buttonId, orderId, interaction, threadId) {
@@ -376,6 +377,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Show Surcharge Modal
                 remarksPrompt(interaction, orderId);
+
+                // Set Timeout for Remarks
+                setTimeout(3600000); //1hr
             }
         },
         "remarksModal" : async () => {

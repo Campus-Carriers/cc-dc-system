@@ -8,6 +8,7 @@ import express from 'express';
 import {
   Client,
   GatewayIntentBits,
+  Events
 } from 'discord.js';
 //import { threadId } from 'node:worker_threads';
 
@@ -105,7 +106,7 @@ app.post("/trigger", async (req, res) => {
 // =========================
 const firstClick = new Map();
 
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate"
   if (!interaction.isButton() && !interaction.isModalSubmit()) return;
 
   console.log(
