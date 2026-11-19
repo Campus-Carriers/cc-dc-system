@@ -4,6 +4,7 @@
 import { newButtons } from './prompt commands/newButtons.js';
 import { pricePrompt } from './prompt commands/pricePrompt.js';
 import { imagePrompt } from './prompt commands/imagePrompt.js';
+import { editPostLogInfo, editPostLogRemarks } from './prompt commands/editPostLogPrompt.js';
 import { surchargePrompt } from './prompt commands/surchargePrompt.js';
 import { remarksPrompt } from './prompt commands/remarksPrompt.js';
 import { toSheets } from './toSheets.js';
@@ -11,7 +12,7 @@ import { time } from 'node:console';
 import { setTimeout } from 'node:timers/promises';
 import { ChannelType } from 'discord.js';
 
-export function interactions(notifType, buttonId, orderId, interaction, threadId) {
+export function interactions(notifType, buttonId, orderId, interaction, threadId, client) {
     // Get the Message Interacted With
     const message = interaction.message;
     // Get the Channel to Send the Prompts to (should specify thread also eventually)
@@ -410,6 +411,150 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     }
             };
             toSheets(payload);
+        },
+        "remarks" : () => {},
+        "postLog" : {
+            "editInfo" : async () => {
+                console.log("showing post log information prompt");
+                console.log(`Order ID: ${orderId}`);
+                
+                // Show edit post log prompt
+                editPostLogInfo(interaction, orderId);
+
+                await message.edit({
+                    components: newButtons(message, [0,3]),
+                });
+            },
+            "editRemarks" : async () => {
+                console.log("showing post log remarks prompt");
+                console.log(`Order ID: ${orderId}`);
+                
+                // Show edit post log prompt
+                editPostLogRemarks(interaction, orderId);
+
+                await message.edit({
+                    components: newButtons(message, [1,3]),
+                });
+            },
+            "confirm" : async () => {
+                console.log(`done confirm`);
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1,2]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Post Delivery Log ✅ Confirmed by ${interaction.user}. Are you sure all information is correct? (Click "I'm Sure" button if sure)`
+                });
+
+            },
+            "sure" : async () => {
+                console.log(`done sure`);
+                console.log(message);
+                console.log(message.embeds[0]);
+                // Disable Button/s
+                await message.edit({
+                    components: newButtons(message, [0,1,2,3,4]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Thank you ${interaction.user} for your wonderful service!`
+                });
+
+                const adminChannelId = "1571843725498515477" // should be in env file
+                const adminChannel = await client.channels.fetch(adminChannelId);
+                adminChannel.send({
+                    content: `Post Delivery Log for order ${orderId} by carrier ${interaction.user}`,
+                    embeds: [message.embeds[0]] || 'error',
+                });
+            },
+            "undo" : async () => { 
+                console.log(`undo post log`);
+                // Disable Button/s
+                await message.edit({
+                components: newButtons(message, [3,4]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                content: `Post Delivery Log ❌ Undone by ${interaction.user}`
+                });
+            },
+        },
+        "postLogInfoModal" : async () => {
+            console.log('in info post log modal');
+            console.log(notifType);
+
+            interaction.editReply({
+                content: "Updating and fetching your new Post Delivery Log..."
+            });
+
+            const getVal = (id) => interaction.fields.getTextInputValue(id) || "none";
+
+            const delivLoc = getVal('deliveryLocation');
+            const timeDis = getVal('timeDispatched');
+            const timeBought = getVal('timeBought');
+            const timeArri = getVal('timeArrived');
+            const timeDel = getVal('timeDelivered');
+
+            console.log(`Inputted Delivery Location: ${delivLoc}`);
+            console.log(`Inputted Time Dispatched: ${timeDis}`);
+            console.log(`Inputted Time Bought: ${timeBought}`);
+            console.log(`Inputted Time Arrived: ${timeArri}`);
+            console.log(`Inputted Time Delivered: ${timeDel}`);
+
+            // Send Info to Apps Script, Trigger Errand Done
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            delivLoc: delivLoc || 'error',
+                            timeDispatched: timeDis || 'error',
+                            timeBought: timeBought || 'error',
+                            timeArrived: timeArri || 'error',
+                            timeDelivered: timeDel || 'error',
+                        },
+                    }
+                };
+                toSheets(payload);
+        },
+        "postLogRemarksModal" : async () => {
+            console.log('in remarks post log modal');
+            console.log(notifType);
+
+            interaction.editReply({
+                content: "Updating and fetching your new Post Delivery Log..."
+            });
+
+            const getVal = (id) => interaction.fields.getTextInputValue(id) || "none";
+
+            const cusRemarks = getVal('cusRemarks');
+            const carRemarks = getVal('carRemarks');
+
+            console.log(`Inputted Customer Remarks: ${cusRemarks}`);
+            console.log(`Inputted Carrier Remarks: ${carRemarks}`);
+            
+            // Send Info to Apps Script, Trigger Errand Done
+                payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            customerRemarks: cusRemarks || 'error',
+                            carrierRemarks: carRemarks || 'error',
+                        },
+                    }
+                };
+                toSheets(payload); 
         },
     };
 

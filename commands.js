@@ -103,6 +103,36 @@ export function commands(channel, res, orderId, notifType, info) {
 
             sendMessage(channel, res, title, message, color, buttons);
         },
+        "update_delivered" : () => {},
+        "remarks" : () => {},
+        "post_delivery_log" : () => {
+            console.log(`channel: ${channel}`);
+            console.log('post delivery information prompted');
+            
+            // message should be sent from apps script
+            message = `----------------------------------------------
+ 🛒 ${info.body.cusName}, ${info.body.deliveryLoc}:
+**Date: 10/28/2026 
+Carrier Name: ${info.body.carName}**
+> Time Carrier Dispatched: ${info.body.timeDis}
+> Time Bought Order: ${info.body.timeBought}
+> Time Arrived at Location: ${info.body.timeArri}
+> Time Delivered to Customer: ${info.body.timeDel}
+> Customer Remarks from Carrier: ${info.body.cusRemarks}
+> Carrier Remarks from Customer: ${info.body.carRemarks}
+Pricing (Total - CC:Carrier): ${info.body.priceBreakdown}
+ ----------------------------------------------`;
+            title = "Post Delivery Log";
+            buttons = [
+                [`${orderId}_postLog_editInfo_${channelId}`,"Edit Info","Secondary",false],
+                [`${orderId}_postLog_editRemarks_${channelId}`,"Edit Remarks","Secondary",false],
+                [`${orderId}_postLog_confirm_${channelId}`,"Confirm","Secondary",false],
+                [`${orderId}_postLog_sure_${channelId}`,"I'm Sure","Secondary",true],
+                [`${orderId}_postLog_undo_${channelId}`,"Undo","Secondary",true]
+            ];
+
+            sendMessage(channel, res, title, message, color, buttons);
+        },
     };
     return(commands[notifType]);
 }

@@ -143,6 +143,7 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
       (notifType === "bought/done" && buttonId === "confirm") ||
       (notifType === "arrived" && buttonId === "confirm") ||
       (notifType === "delivered" && buttonId === "confirm") ||
+      (buttonId === "editInfo" || buttonId === "editRemarks") ||
       (buttonId === "surcharge") || 
       (buttonId === "remarks");
     if (!opensModal) {
