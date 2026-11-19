@@ -103,8 +103,6 @@ export function commands(channel, res, orderId, notifType, info) {
 
             sendMessage(channel, res, title, message, color, buttons);
         },
-        "update_delivered" : () => {},
-        "remarks" : () => {},
         "post_delivery_log" : () => {
             console.log(`channel: ${channel}`);
             console.log('post delivery information prompted');
