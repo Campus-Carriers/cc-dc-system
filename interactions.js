@@ -25,16 +25,19 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     const interactions = {
         "new" : {
             "accept" : async () => {
+                console.log("new 1");
                 // Send Interaction Notif
                 console.log(`Carrier ${carrier} is on the way`);
                 await interaction.editReply(`Errand ✅ Accepted by ${carrier}`);
 
+                console.log("new 2");
                 // Disable Button/s
                 // TODO: make limiter
                 await message.edit({
                 components: newButtons(message, [0,1]),
                 });
 
+                console.log("new 3");
                 // Create Private Thread with Carrier and EBs
                 const orderThread = await interaction.channel.threads.create({
                                     name: `Order ${orderId} - ${carrier.username}`,
@@ -44,6 +47,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...`,
                 });//var userMessage =
 
+                console.log("new 4");
                 // Send Info to Apps Script, Trigger Dispatch
                 payload = {
                     action: notifType,
