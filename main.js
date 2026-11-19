@@ -8,8 +8,9 @@ import express from 'express';
 import {
   Client,
   GatewayIntentBits,
+  Events
 } from 'discord.js';
-import { threadId } from 'node:worker_threads';
+//import { threadId } from 'node:worker_threads';
 
 const app = express();
 
@@ -85,7 +86,7 @@ app.post("/trigger", async (req, res) => {
     }
     console.log("chnl check 2");
 
-    console.log("erm");
+    console.log(`erm + ${orderId}`);
 ////// SEND PROMPT - based on trigger notif type
     var action = commands(channel, res, orderId, notifType, info);
     action();
@@ -103,9 +104,9 @@ app.post("/trigger", async (req, res) => {
 // =========================
 // BUTTON INTERACTIONS
 // =========================
-globalThis.firstClick = {};
+const firstClick = new Map();
 
-client.on("interactionCreate", async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate"
   if (!interaction.isButton() && !interaction.isModalSubmit()) return;
 
   console.log(
@@ -118,23 +119,42 @@ client.on("interactionCreate", async (interaction) => {
     const notifType = custId[1];
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
-    console.log(custId, orderId, notifType, buttonId, threadId);
+    console.log(`THREADID: ${threadId}`);
+    console.log(interaction.customId, orderId, notifType, buttonId, threadId);
+
+    // Only the first new-order Accept click claims the order.
+    if (notifType === "new" && buttonId === "accept") {
+      if (firstClick.has(orderId)) {
+        console.log(`Order ${orderId} was already claimed by ${firstClick.get(orderId)}`);
+        return await interaction.reply({
+          content: "This order has been claimed already.",
+          ephemeral: true,
+        });
+      }
+
+      firstClick.set(orderId, interaction.user.id);
+      console.log(`Order ${orderId} first accepted by ${interaction.user.tag}`);
+    }
+
+    // Check User Validity: Carrier Account
     
     // Acknowledge Button Click
     const opensModal =
       (notifType === "bought/done" && buttonId === "confirm") ||
       (notifType === "arrived" && buttonId === "confirm") ||
       (notifType === "delivered" && buttonId === "confirm") ||
-      (buttonId === "editInfo" || buttonId === "editRemarks");
+      (buttonId === "editInfo" || buttonId === "editRemarks") ||
+      (buttonId === "surcharge") || 
+      (buttonId === "remarks");
     if (!opensModal) {
       await interaction.deferReply();
     }
 
 ////// ACT ON BUTTON CLICK - based on notif type
-    console.log(`${notifType}+${buttonId}`);
-    const interact = interactions(notifType, buttonId, orderId, interaction, threadId, client);
+    console.log(`${notifType}+${buttonId}+${orderId}`);
+    const interact = interactions(notifType, buttonId, orderId, interaction, threadId);
     await interact();
-    console.log(`${notifType}+${buttonId}`);
+    console.log(`${notifType}+${buttonId}+${orderId}`);
   } catch (error) {
     console.error("Button interaction error:", error);
 
