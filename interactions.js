@@ -412,7 +412,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             };
             toSheets(payload);
         },
-        "remarks" : () => {},
         "postLog" : {
             "editInfo" : async () => {
                 console.log("showing post log information prompt");
