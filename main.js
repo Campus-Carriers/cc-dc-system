@@ -144,8 +144,7 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
       (notifType === "arrived" && buttonId === "confirm") ||
       (notifType === "delivered" && buttonId === "confirm") ||
       (buttonId === "editInfo" || buttonId === "editRemarks") ||
-      (buttonId === "surcharge") || 
-      (buttonId === "remarks");
+      (buttonId === "surcharge" || buttonId === "remarks");
     if (!opensModal) {
       await interaction.deferReply();
     }
