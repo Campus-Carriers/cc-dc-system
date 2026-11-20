@@ -313,7 +313,7 @@ Order Price ${submittedPrice}PHP`);
             console.log(surchargeMessage);
 
             try {
-                interaction.editReply({
+                await interaction.editReply({
                     content: surchargeMessage
                 });
             } catch (e) { console.log(`error: ${e}`); }
