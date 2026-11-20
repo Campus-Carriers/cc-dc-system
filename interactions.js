@@ -44,10 +44,11 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Create Private Thread with Carrier and EBs
                 const orderThread = await interaction.channel.threads.create({
                                     name: `Order ${orderId} - ${carrier.username}`,
-                                    type: ChannelType.PrivateThread,
-                                    });
+                                    type: ChannelType.PrivateThread,                                    });
                 await orderThread.send({
-                    content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...`,
+                    content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...
+                    
+                    _added <@&${'1567700287152717924'}>s to the thread._`,
                 });//var userMessage =
 
                 console.log("new 4");
