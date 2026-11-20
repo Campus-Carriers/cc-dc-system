@@ -50,9 +50,6 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);
         },
         "update_arrived" : () => {
-            // Send Price Breakdown
-            channel.send(`Here is the order's Price Breakdown:\n${info.body.priceBreakdown}`);
-
             // Send Arrived at Delivery Location Prompt
             message = `Press the button below once you have arrived at the delivery address: ${info.body.deliveryLoc}.`;
             title = "Order Update: Arrived at Delivery Location";
@@ -80,6 +77,9 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);
         },
         "update_delivered" : () => {
+            // Send Price Breakdown
+            channel.send(`Here is the order's Price Breakdown:\n${info.body.priceBreakdown}`);
+
             // Send Arrived at Delivery Location Prompt
             message = `Press the button below once you have handed over the order.`;
             title = "Order Update: Order Delivered";
