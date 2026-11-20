@@ -122,16 +122,6 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
     `Button clicked: ${interaction.customId} by ${interaction.user.tag}`
   );
 
-  // Validate Username
-  if (!carrierUns.includes(interaction.user.username)) {
-    console.log(`${interaction.user} is an invalid account (not registered as a carrier).`);
-    return await interaction.reply({
-      content: "Your username is not registered in the CC system.",
-      ephemeral: true,
-    });
-  }
-  console.log(`${interaction.user} is a valid carrier account!`);
-
   try {
     const custId = interaction.customId.split("_");
     const orderId = custId[0];
@@ -140,6 +130,16 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
     const threadId = custId.length == 4 ? custId[3] : custId[2];
     console.log(`THREADID: ${threadId}`);
     console.log(interaction.customId, orderId, notifType, buttonId, threadId);
+
+    // Validate Username
+    if (notifType == "new" && !carrierUns.includes(interaction.user.username)) {
+      console.log(`${interaction.user} is an invalid account (not registered as a carrier).`);
+      return await interaction.reply({
+        content: "Your username is not registered in the CC system.",
+        ephemeral: true,
+      });
+    }
+    console.log(`${interaction.user} is a valid carrier account!`);
 
     // Only the first new-order Accept click claims the order.
     if (notifType === "new" && buttonId === "accept") {
