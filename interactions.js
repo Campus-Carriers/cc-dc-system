@@ -403,9 +403,6 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Show Surcharge Modal
                 await remarksPrompt(interaction, orderId);
-
-                // Set Timeout for Remarks
-                setTimeout(3600000); //1hr
             }
         },
         "remarksModal" : async () => {
