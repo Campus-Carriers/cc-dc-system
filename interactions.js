@@ -489,6 +489,19 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     content: `Thank you ${interaction.user} for your wonderful service!`
                 });
 
+                // Send Notif to Clear Thread Info in Sheets
+                payload = {
+                        action: serviceEnd,
+                        orderId: orderId,
+                        data: {
+                            timestamp: timeNow,
+                            carrier: carrier.username,
+                            threadId: threadId,
+                            info: {},
+                        }
+                };
+                toSheets(payload);
+
                 const adminChannelId = process.env.ADMIN_POSTDELIVLOG || "1571843725498515477";//"1571843725498515477" // do in main
                 const adminChannel = await client.channels.fetch(adminChannelId);
                 adminChannel.send({
