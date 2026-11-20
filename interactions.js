@@ -599,7 +599,7 @@ Order Price ${submittedPrice}PHP`);
 
     const handler = buttonId === "none"
         ? interactions[notifType]
-        : interactions[notifType]?.[buttonId];//??          (buttonId === "surchargeModal" ? interactions.surchargeModal : undefined);
+        : interactions[notifType][buttonId];//??          (buttonId === "surchargeModal" ? interactions.surchargeModal : undefined);
 
     if (typeof handler !== "function") {
         throw new Error(`No interaction handler for ${notifType}/${buttonId}`);
