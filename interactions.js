@@ -403,6 +403,11 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Show Surcharge Modal
                 await remarksPrompt(interaction, orderId);
+
+                // Disable button
+                await message.edit({
+                    components: newButtons(message, [0]),
+                });
             }
         },
         "remarksModal" : async () => {
@@ -442,9 +447,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Show edit post log prompt
                 await editPostLogInfo(interaction, orderId);
 
-                await message.edit({
+                /*await message.edit({
                     components: newButtons(message, [0,3]),
-                });
+                });*/
             },
             "editRemarks" : async () => {
                 console.log("showing post log remarks prompt");
@@ -453,9 +458,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Show edit post log prompt
                 await editPostLogRemarks(interaction, orderId);
 
-                await message.edit({
+                /*await message.edit({
                     components: newButtons(message, [1,3]),
-                });
+                });*/
             },
             "confirm" : async () => {
                 console.log(`done confirm`);
