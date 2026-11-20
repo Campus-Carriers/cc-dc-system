@@ -123,7 +123,7 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
   );
 
   // Validate Username
-  if (!validUns.includes(interaction.user.username)) {
+  if (!carrierUns.includes(interaction.user.username)) {
     console.log(`${interaction.user} is an invalid account (not registered as a carrier).`);
     return await interaction.reply({
       content: "Your username is not registered in the CC system.",
