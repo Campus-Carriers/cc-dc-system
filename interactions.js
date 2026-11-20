@@ -312,9 +312,11 @@ Order Price ${submittedPrice}PHP`);
             `${selectedSurcharges.includes('examWeek') ? 'Exam Week' : ''}`;//surchargeContent
             console.log(surchargeMessage);
 
-            await interaction.editReply({
-                content: surchargeMessage
-            });
+            try {
+                await interaction.editReply({
+                    content: surchargeMessage
+                });
+            } catch (e) { console.log(`error: ${e}`); }
             console.log('after edit reply');
 
             payload = {
