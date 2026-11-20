@@ -138,8 +138,7 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
         content: "Your username is not registered in the CC system.",
         ephemeral: true,
       });
-    }
-    console.log(`${interaction.user} is a valid carrier account!`);
+    } else { console.log(`${interaction.user} is a valid carrier account!`); }
 
     // Only the first new-order Accept click claims the order.
     if (notifType === "new" && buttonId === "accept") {
