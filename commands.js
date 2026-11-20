@@ -52,7 +52,7 @@ export function commands(channel, res, orderId, notifType, info) {
         "update_arrived" : () => {
             // Send Arrived at Delivery Location Prompt
             title = "Order Update: Arrived at Delivery Location";
-            message = `Press the button below once you have arrived at the delivery address: ${info.body.deliveryLoc}.`;
+            message = `Press the button below once you have arrived at the delivery address: **${info.body.deliveryLoc}**.`;
             buttons = [
                 // Id, Label, Style, Disabled
                 [`${orderId}_arrived_arrived_${channelId}`,"Arrived","Primary",false],
@@ -95,7 +95,7 @@ export function commands(channel, res, orderId, notifType, info) {
             console.log(`channel: ${channel}`);
             console.log('Remarks prompted');
 
-            title = "Customer and Carrier Remarks [REQUIRED]";
+            title = "[REQUIRED] Customer and Carrier Remarks";
             message = "Please click the Remarks button to input any comments or remarks from you, the carrier, and/or from the customer. If there none, put \"none\".";
             buttons = [
                 [`${orderId}_remarks_remarks_${channelId}`,"Remarks","Secondary",false],

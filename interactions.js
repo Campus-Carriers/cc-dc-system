@@ -48,7 +48,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await orderThread.send({
                     content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...
                     
-                    _added <@&${'1567700287152717924'}>s to the thread._`,
+_added <@&${'1567700287152717924'}>s to the thread._`,
                 });//var userMessage =
 
                 console.log("new 4");
@@ -179,8 +179,8 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 
                 // Send Interaction Notif
                 await interaction.editReply(`Errand Accomplishment ✅ Confirmed with: 
-                    Image Proof ${imageProof.name} and 
-                    Order Price ${submittedPrice}PHP`);
+Image Proof ${imageProof.name} and 
+Order Price ${submittedPrice}PHP`);
             },
             "undo" : async () => {
                 console.log(`undo`);
