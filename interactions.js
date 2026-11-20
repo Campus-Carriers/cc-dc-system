@@ -607,5 +607,6 @@ Order Price ${submittedPrice}PHP`);
         throw new Error(`No interaction handler for ${notifType}/${buttonId}`);
     }
 
+    console.log(handler);
     return handler;
 }
