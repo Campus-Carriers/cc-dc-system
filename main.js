@@ -130,6 +130,7 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
       ephemeral: true,
     });
   }
+  console.log(`${interaction.user} is a valid carrier account!`);
 
   try {
     const custId = interaction.customId.split("_");
