@@ -166,12 +166,13 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
       console.log(opensModal);
     if (!opensModal) {
       await interaction.deferReply();
+      console.log("--");
     }
 
 ////// ACT ON BUTTON CLICK - based on notif type
     console.log(`${notifType}+${buttonId}+${orderId}`);
     const interact = interactions(notifType, buttonId, orderId, interaction, threadId, client);
-    await interact();
+    interact();
     console.log(`${notifType}+${buttonId}+${orderId}`);
   } catch (error) {
     console.error("Button interaction error:", error);
