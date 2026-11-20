@@ -8,14 +8,6 @@ export async function surchargePrompt(interaction, message, orderId, notifType =
     console.log('executing surcharge prompt');
     console.log(`Order ID: ${orderId}`);
 
-    // Set Custom ID depending on notifType
-    let custId;
-    if (notifType) {
-      custId = `${orderId}_surchargeModal`;
-    } else {
-      custId = `${orderId}_surchargeModalF`;
-    }
-
     // surcharge values
     var surchargeValues = [
                     { label: 'Peak Hours', value: 'peakHours', description: '11AM to 2PM and 5PM to 7PM' },
@@ -27,7 +19,7 @@ export async function surchargePrompt(interaction, message, orderId, notifType =
     
     // build modal
     const modal = new ModalBuilder()
-        .setCustomId(custId)
+        .setCustomId(`${orderId}_surchargeModal`)
         .setTitle('Surcharge Options');
 
     // build modal contents
