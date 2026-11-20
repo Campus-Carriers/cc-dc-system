@@ -267,7 +267,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "confirm" : async () => { 
                 // Send Interaction Notif
                 await interaction.editReply({
-                    content: `Please Confirm [?] Applicable Surcharges, Carrier ${interaction.user}.`
+                    content: `Surcharges have been finalized, Carrier ${interaction.user}.`
                 });
                 console.log(`surcharge`);
 
@@ -472,7 +472,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     content: `Thank you ${interaction.user} for your wonderful service!`
                 });
 
-                const adminChannelId = "1571843725498515477" // should be in env file
+                const adminChannelId = "1571843725498515477" // should be in env file // do in main
                 const adminChannel = await client.channels.fetch(adminChannelId);
                 adminChannel.send({
                     content: `Post Delivery Log for order ${orderId} by carrier ${interaction.user}`,
