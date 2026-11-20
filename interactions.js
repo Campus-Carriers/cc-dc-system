@@ -491,7 +491,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Send Notif to Clear Thread Info in Sheets
                 payload = {
-                        action: serviceEnd,
+                        action: 'serviceEnd',
                         orderId: orderId,
                         data: {
                             timestamp: timeNow,
