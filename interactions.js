@@ -123,7 +123,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`Order ID: ${orderId}`);
 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
+                await surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
             },
         },
         "bought/done" : {
@@ -190,7 +190,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`Order ID: ${orderId}`);
 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
+                await surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
             },
         },
         "arrived" : {
@@ -254,7 +254,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log("showing surcharge prompt");
                 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
+                await surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
             },
         },
         "surcharge" : {
@@ -316,6 +316,34 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                         threadId: threadId,
                         info: {
                             surchargeInfo: surchargeContent || 'error',
+                            finalSurcharge: false,
+                        },
+                    }
+            };
+            toSheets(payload);
+        },
+        "surchargeModalF" : async () => {
+            console.log('in surcharge modal');
+            var selectedSurcharges = interaction.fields.getCheckboxGroup('surchargeCheckboxes');
+            var surchargeContent = `${selectedSurcharges.join(', ')}`;
+            var surchargeMessage = `Surcharges applied: ${surchargeContent}`
+            console.log(surchargeMessage);
+
+            await interaction.editReply({
+                content: surchargeMessage
+            });
+            console.log('after edit reply');
+
+            payload = {
+                    action: notifType,
+                    orderId: orderId,
+                    data: {
+                        timestamp: timeNow,
+                        carrier: carrier.username,
+                        threadId: threadId,
+                        info: {
+                            surchargeInfo: surchargeContent || 'error',
+                            finalSurcharge: true,
                         },
                     }
             };
@@ -384,7 +412,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`Order ID: ${orderId}`);
 
                 // Show Surcharge Modal
-                surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
+                await surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
             },
         },
         "remarks" : {
@@ -392,7 +420,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log("showing remarks prompt");
 
                 // Show Surcharge Modal
-                remarksPrompt(interaction, orderId);
+                await remarksPrompt(interaction, orderId);
 
                 // Set Timeout for Remarks
                 setTimeout(3600000); //1hr
@@ -433,7 +461,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`Order ID: ${orderId}`);
                 
                 // Show edit post log prompt
-                editPostLogInfo(interaction, orderId);
+                await editPostLogInfo(interaction, orderId);
 
                 await message.edit({
                     components: newButtons(message, [0,3]),
@@ -444,7 +472,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`Order ID: ${orderId}`);
                 
                 // Show edit post log prompt
-                editPostLogRemarks(interaction, orderId);
+                await editPostLogRemarks(interaction, orderId);
 
                 await message.edit({
                     components: newButtons(message, [1,3]),
@@ -572,13 +600,14 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
         },
     };
 
-    try {
-        if (buttonId !== "none") {
-            console.log("not none");
-            return(interactions[notifType][buttonId]);
-        }
-        else { console.log("none"); return(interactions[notifType]); }
-    } catch (error) {
-        console.log(`Interaction Error: ${error}`)
+    const handler = buttonId === "none"
+        ? interactions[notifType]
+        : interactions[notifType]?.[buttonId] ??
+          (buttonId === "surchargeModal" ? interactions.surchargeModal : undefined);
+
+    if (typeof handler !== "function") {
+        throw new Error(`No interaction handler for ${notifType}/${buttonId}`);
     }
+
+    return handler;
 }

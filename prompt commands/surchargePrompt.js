@@ -11,9 +11,9 @@ export async function surchargePrompt(interaction, message, orderId, notifType =
     // Set Custom ID depending on notifType
     let custId;
     if (notifType) {
-      custId = `${orderId}_${notifType}_surcharge_${interaction.channel.id}`;
-    } else {
       custId = `${orderId}_surchargeModal`;
+    } else {
+      custId = `${orderId}_surchargeModalF`;
     }
 
     // surcharge values
