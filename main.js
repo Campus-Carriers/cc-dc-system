@@ -35,6 +35,9 @@ app.get("/", (req, res) => {
   res.send("Discord bot is online.");
 });
 
+// Valid Carrier Username List
+var carrierUns;
+
 // ===========================
 //    APPS SCRIPT TRIGGER
 // ===========================
@@ -64,6 +67,12 @@ app.post("/trigger", async (req, res) => {
 
     // Log Info Received
     console.log("Webhook data:", req.body);
+
+    // Assign Valid Carrier Usernames
+    if (notifType === "newOrder") {
+      carrierUns = info.validUns;
+      console.log(`Communicated Carrier UNs: ${carrierUns}`);
+    }
 
     // Handle Channel ID Existence
     if (!channelId) { // || !message
@@ -112,6 +121,15 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
   console.log(
     `Button clicked: ${interaction.customId} by ${interaction.user.tag}`
   );
+
+  // Validate Username
+  if (!validUns.includes(interaction.user.username)) {
+    console.log(`${interaction.user} is an invalid account (not registered as a carrier).`);
+    return await interaction.reply({
+      content: "Your username is not registered in the CC system.",
+      ephemeral: true,
+    });
+  }
 
   try {
     const custId = interaction.customId.split("_");
