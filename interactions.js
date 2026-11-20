@@ -66,17 +66,18 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             },
             "reject" : async () => {
                 console.log(`❌ Rejected by ${carrier.username}`);
-                
-                // TODO: make limiter
 
-                await interaction.editReply("You have rejected the order");
-            },/**/
+                await interaction.editReply({
+                    content: `${carrier}, you have rejected the order`,
+                    ephemeral: true,
+                });
+            },
         },
         "dispatch" : {
             "dispatched" : async () => {
                 // Send Interaction Notif
                 await interaction.editReply({ 
-                    content: `Please Confirm [?] Acceptance of Order  ${orderId}, Carrier ${interaction.user}` 
+                    content: `❔ Please Confirm Dispatch, Carrier ${interaction.user}` 
                 });
 
                 // Disable Dispatched Button
@@ -90,6 +91,11 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2,3]),
+                });
+
+                // Send Interaction Notif
+                await interaction.editReply({
+                    content: `Carrier Dispatch ✅ Confirmed by ${interaction.user}`
                 });
 
                 console.log(`order ID: ${orderId}`);
@@ -110,7 +116,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
-                components: newButtons(message, [1,2]),
+                    components: newButtons(message, [1,2]),
                 });
 
                 // Send Interaction Notif
@@ -130,7 +136,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "done" : async () => {
                 // Send Interaction Notif
                 await interaction.editReply({
-                    content: `Please Confirm [?] Errand Accomplishment, Carrier ${interaction.user}`
+                    content: `❔ Please Confirm Errand Accomplishment, Carrier ${interaction.user}`
                 });
                 console.log(`done`);
 
@@ -171,7 +177,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 await toSheets(payload);
                 
                 // Send Interaction Notif
-                await interaction.editReply(`Errand Accomplishment ✅ Confirmed with: Image Proof ${imageProof.name} and Order Price ${submittedPrice}PHP submitted by ${interaction.user}.`);
+                await interaction.editReply(`Errand Accomplishment ✅ Confirmed with: 
+                    Image Proof ${imageProof.name} and 
+                    Order Price ${submittedPrice}PHP`);
             },
             "undo" : async () => {
                 console.log(`undo`);
@@ -197,7 +205,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "arrived" : async () => {
                 // Send Interaction Notif
                 await interaction.editReply({
-                    content: `Please Confirm [?] Arrival, Carrier ${interaction.user}`
+                    content: `❔ Please Confirm Arrival, Carrier ${interaction.user}`
                 });
                 console.log(`arrived`);
 
@@ -267,7 +275,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "confirm" : async () => { 
                 // Send Interaction Notif
                 await interaction.editReply({
-                    content: `Surcharges have been finalized, Carrier ${interaction.user}.`
+                    content: `✅ Surcharges have been finalized, Carrier ${interaction.user}.`
                 });
                 console.log(`surcharge`);
 
@@ -294,7 +302,13 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             console.log('in surcharge modal');
             var selectedSurcharges = interaction.fields.getCheckboxGroup('surchargeCheckboxes');
             var surchargeContent = `${selectedSurcharges.join(', ')}`;
-            var surchargeMessage = `Surcharges applied: ${surchargeContent}`
+            var surchargeMessage = "Surcharges applied: " +
+            `${selectedSurcharges.includes('extraWeight') ? 'Extra Weight, ' : ''}`  +
+            `${selectedSurcharges.includes('extremeHeat') ? 'Heavy Heat, ' : ''}`  +
+            `${selectedSurcharges.includes('rainyWeather') ? 'Heavy Rain, ' : ''}`  +
+            `${selectedSurcharges.includes('extremeHeat') ? 'Extreme Heat, ' : ''}`  +
+            `${selectedSurcharges.includes('peakHours') ? 'Peak Hours, ' : ''}`  +
+            `${selectedSurcharges.includes('examWeek') ? 'Exam Week' : ''}`;//surchargeContent
             console.log(surchargeMessage);
 
             await interaction.editReply({
@@ -320,7 +334,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
             "delivered" : async () => {
                 // Send Interaction Notif
                 await interaction.editReply({
-                    content: `Please Confirm [?] Delivery, Carrier ${interaction.user}`
+                    content: `❔ Please Confirm Delivery, Carrier ${interaction.user}`
                 });
                 console.log(`delivered`);
 
@@ -371,7 +385,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Send Interaction Notif
                 await interaction.editReply({
-                content: `Arrival ❌ Undone by ${interaction.user}`
+                content: `Delivery ❌ Undone by ${interaction.user}`
                 });
             },
             "surcharge" : async () => {
@@ -454,7 +468,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Send Interaction Notif
                 await interaction.editReply({
-                    content: `Post Delivery Log ✅ Confirmed by ${interaction.user}. Are you sure all information is correct? (Click "I'm Sure" button if sure)`
+                    content: `Post Delivery Log ✅ Confirmed by ${interaction.user}.  Are you sure all information is correct? (Click "I'm Sure" button if sure)`
                 });
 
             },
@@ -472,12 +486,12 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     content: `Thank you ${interaction.user} for your wonderful service!`
                 });
 
-                /*const adminChannelId = "1571843725498515477" // should be in env file // do in main
+                const adminChannelId = process.env.ADMIN_POSTDELIVLOG || "1571843725498515477";//"1571843725498515477" // do in main
                 const adminChannel = await client.channels.fetch(adminChannelId);
                 adminChannel.send({
                     content: `Post Delivery Log for order ${orderId} by carrier ${interaction.user}`,
                     embeds: [message.embeds[0]] || 'error',
-                });*/
+                });
             },
             "undo" : async () => { 
                 console.log(`undo post log`);
@@ -488,7 +502,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
 
                 // Send Interaction Notif
                 await interaction.editReply({
-                content: `Post Delivery Log ❌ Undone by ${interaction.user}`
+                content: `Post Delivery Log Finalization ❌ Undone by ${interaction.user}`
                 });
             },
         },

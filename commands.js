@@ -5,7 +5,7 @@ import { sendMessage } from './prompt commands/sendMessage.js';
 
 export function commands(channel, res, orderId, notifType, info) {
     var message;
-    var color = "#5865F2";
+    var color = "#39adfb";
     var title;
     var buttons;
     const channelId = channel.id;
@@ -25,8 +25,8 @@ export function commands(channel, res, orderId, notifType, info) {
         },
         "update_dispatched" : () => {
             console.log(`channel: ${channel}`);
-            message = "Press the button below once you have left to pick-up the order:\n\n" + info.body;
             title = "Order Update: Dispatch";
+            message = "Press the button below once you have left to pick-up the order:\n----------------------------------\n\n" + info.body;
             buttons = [
                 // Id, Label, Style, Disabled
                 [`${orderId}_dispatch_dispatched_${channelId}`,"Carrier Dispatched","Success",false],
@@ -38,8 +38,8 @@ export function commands(channel, res, orderId, notifType, info) {
         },
         "update_boughtOrDone" : () => {
             console.log(`channel: ${channel}`);
+            title = "Order Update: Oroder Bought/Errand Accomplished";
             message = "Press the button below once you have bought the order or accomplished the errand.";
-            title = "Order Update: Errand Accomplished";
             buttons = [
                 // Id, Label, Style, Disabled
                 [`${orderId}_bought/done_done_${channelId}`,"Errand Done","Success",false],
@@ -51,8 +51,8 @@ export function commands(channel, res, orderId, notifType, info) {
         },
         "update_arrived" : () => {
             // Send Arrived at Delivery Location Prompt
-            message = `Press the button below once you have arrived at the delivery address: ${info.body.deliveryLoc}.`;
             title = "Order Update: Arrived at Delivery Location";
+            message = `Press the button below once you have arrived at the delivery address: ${info.body.deliveryLoc}.`;
             buttons = [
                 // Id, Label, Style, Disabled
                 [`${orderId}_arrived_arrived_${channelId}`,"Arrived","Primary",false],
@@ -67,8 +67,8 @@ export function commands(channel, res, orderId, notifType, info) {
             console.log(`channel: ${channel}`);
             console.log('Surcharge prompted');
 
-            message = "Please click the Surcharge button to apply any applicable surcharges.";
             title = "Applicable Surcharges";
+            message = "Please click the Surcharge button to input the applicable surcharges. Click Confirm once they have been finalized (cannot be edited anymore after).";
             buttons = [
                 [`${orderId}_surcharge_surcharge_${channelId}`,"Surcharge","Secondary",false],
                 [`${orderId}_surcharge_confirm_${channelId}`,"Confirm","Secondary",false],
@@ -81,8 +81,8 @@ export function commands(channel, res, orderId, notifType, info) {
             channel.send(`Here is the order's Price Breakdown:\n${info.body.priceBreakdown}`);
 
             // Send Arrived at Delivery Location Prompt
-            message = `Press the button below once you have handed over the order.`;
             title = "Order Update: Order Delivered";
+            message = `Press the button below once you have handed over the order.`;
             buttons = [
                 // Id, Label, Style, Disabled
                 [`${orderId}_delivered_delivered_${channelId}`,"Delivered","Primary",false],
@@ -95,8 +95,8 @@ export function commands(channel, res, orderId, notifType, info) {
             console.log(`channel: ${channel}`);
             console.log('Remarks prompted');
 
-            message = "Please click the Remarks button to input any comments or remarks from you, the carrier, or from the customer.";
-            title = "Customer and Carrier Remarks";
+            title = "Customer and Carrier Remarks [REQUIRED]";
+            message = "Please click the Remarks button to input any comments or remarks from you, the carrier, and/or from the customer. If there none, put \"none\".";
             buttons = [
                 [`${orderId}_remarks_remarks_${channelId}`,"Remarks","Secondary",false],
             ];

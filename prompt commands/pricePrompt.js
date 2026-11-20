@@ -35,6 +35,7 @@ export async function pricePrompt(orderId, interaction, notifType, threadId) {
 
   const textLabel = new LabelBuilder()
       .setLabel('Enter Order/Errand Price:')
+      .setDescription("SRTICTLY do not input letters/text.")
       .setTextInputComponent(textInput);
   
   modal.addLabelComponents(textLabel);

@@ -25,6 +25,7 @@ export async function surchargePrompt(interaction, message, orderId, notifType =
     // build modal contents
     const label = new LabelBuilder()
         .setLabel(message)
+        .setDescription("NOTE: Select ALL applicable surcharges. Previous inputs will be overridden by this one.")
         .setCheckboxGroupComponent((checkboxes) => checkboxes
             .setCustomId('surchargeCheckboxes')
             .addOptions(
