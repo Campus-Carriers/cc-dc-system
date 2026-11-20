@@ -472,12 +472,12 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                     content: `Thank you ${interaction.user} for your wonderful service!`
                 });
 
-                const adminChannelId = "1571843725498515477" // should be in env file // do in main
+                /*const adminChannelId = "1571843725498515477" // should be in env file // do in main
                 const adminChannel = await client.channels.fetch(adminChannelId);
                 adminChannel.send({
                     content: `Post Delivery Log for order ${orderId} by carrier ${interaction.user}`,
                     embeds: [message.embeds[0]] || 'error',
-                });
+                });*/
             },
             "undo" : async () => { 
                 console.log(`undo post log`);
