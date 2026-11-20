@@ -36,7 +36,7 @@ app.get("/", (req, res) => {
 });
 
 // Valid Carrier Username List
-var carrierUns;
+var carrierUns  = [];
 
 // ===========================
 //    APPS SCRIPT TRIGGER
