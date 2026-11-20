@@ -447,9 +447,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Show edit post log prompt
                 await editPostLogInfo(interaction, orderId);
 
-                /*await message.edit({
-                    components: newButtons(message, [0,3]),
-                });*/
+                await message.edit({
+                    components: newButtons(message, [0,1,2,3,4]),
+                });
             },
             "editRemarks" : async () => {
                 console.log("showing post log remarks prompt");
@@ -458,9 +458,9 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 // Show edit post log prompt
                 await editPostLogRemarks(interaction, orderId);
 
-                /*await message.edit({
-                    components: newButtons(message, [1,3]),
-                });*/
+                await message.edit({
+                    components: newButtons(message, [0,1,2,3,4]),
+                });
             },
             "confirm" : async () => {
                 console.log(`done confirm`);
