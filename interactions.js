@@ -505,7 +505,7 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
                 const adminChannelId = process.env.ADMIN_POSTDELIVLOG || "1571843725498515477";//"1571843725498515477" // do in main
                 const adminChannel = await client.channels.fetch(adminChannelId);
                 adminChannel.send({
-                    content: `Post Delivery Log for order ${orderId} by carrier ${interaction.user}`,
+                    content: `Post Delivery Log for order ${orderId} by carrier ${interaction.user.username}`,
                     embeds: [message.embeds[0]] || 'error',
                 });
             },
