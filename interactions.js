@@ -309,11 +309,11 @@ Order Price ${submittedPrice}PHP`);
             `${selectedSurcharges.includes('rainyWeather') ? 'Heavy Rain, ' : ''}`  +
             `${selectedSurcharges.includes('extremeHeat') ? 'Extreme Heat, ' : ''}`  +
             `${selectedSurcharges.includes('peakHours') ? 'Peak Hours, ' : ''}`  +
-            `${selectedSurcharges.includes('examWeek') ? 'Exam Week' : ''}`;//surchargeContent
+            `${selectedSurcharges.includes('examWeek') ? 'Exam Week' : ''}`;
             console.log(surchargeMessage);
 
             try {
-                await interaction.editReply({
+                interaction.editReply({
                     content: surchargeMessage
                 });
             } catch (e) { console.log(`error: ${e}`); }
