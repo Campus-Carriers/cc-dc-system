@@ -10,10 +10,8 @@ export function commands(channel, res, orderId, notifType, info) {
     var buttons;
     const channelId = channel.id;
     
-    console.log(`order ID commands: ${orderId}`);
     const commands = {
         "newOrder" : () => {
-            console.log(`channel: ${channel}`);
             message = info.body;
             title = info.subject;
             buttons = [
@@ -24,7 +22,6 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);/**/
         },
         "update_dispatched" : () => {
-            console.log(`channel: ${channel}`);
             title = "Order Update: Dispatch";
             message = "Press the button below once you have left to pick-up the order:\n----------------------------------\n\n" + info.body;
             buttons = [
@@ -37,7 +34,6 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);
         },
         "update_boughtOrDone" : () => {
-            console.log(`channel: ${channel}`);
             title = "Order Update: Oroder Bought/Errand Accomplished";
             message = "Press the button below once you have bought the order or accomplished the errand.";
             buttons = [
@@ -61,10 +57,8 @@ export function commands(channel, res, orderId, notifType, info) {
                 [`${orderId}_arrived_surcharge_${channelId}`,"Surcharge","Secondary",false]
             ];
             sendMessage(channel, res, title, message, color, buttons);
-            console.log(`THREADID: ${channelId}`);
         },
         "surcharge" : () => {
-            console.log(`channel: ${channel}`);
             console.log('Surcharge prompted');
 
             title = "Applicable Surcharges";
@@ -92,7 +86,6 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);
         },
         "remarks" : () => {
-            console.log(`channel: ${channel}`);
             console.log('Remarks prompted');
 
             title = "[REQUIRED] Customer and Carrier Remarks";
@@ -104,8 +97,7 @@ export function commands(channel, res, orderId, notifType, info) {
             sendMessage(channel, res, title, message, color, buttons);
         },
         "post_delivery_log" : () => {
-            console.log(`channel: ${channel}`);
-            console.log('post delivery information prompted');
+            console.log('Post Delivery Information Prompted');
             
             // message should be sent from apps script
             message = `----------------------------------------------

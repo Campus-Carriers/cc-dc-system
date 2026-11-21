@@ -13,7 +13,6 @@ export function newButtons(message, disable) {
     row.components.forEach((component, index) => {
         const button = ButtonBuilder.from(component);
         disable.indexOf(index) !== -1 ? button.setDisabled(true) : button.setDisabled(false);
-        console.log("disabled buttons: " + disable);
         newRow.addComponents(button);
     });
         

@@ -5,8 +5,7 @@ import {
 } from 'discord.js';
 
 export async function surchargePrompt(interaction, message, orderId, notifType = "") {
-    console.log('executing surcharge prompt');
-    console.log(`Order ID: ${orderId}`);
+    console.log('Executing Surcharge Prompt');
 
     // surcharge values
     var surchargeValues = [

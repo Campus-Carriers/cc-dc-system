@@ -21,7 +21,6 @@ export async function sendMessage(channel, res, title, message, finColor, button
     if (buttons && Array.isArray(buttons) && buttons.length > 0) {
       const row = new ActionRowBuilder();
 
-      console.log(`buttons: ${buttons}`);
       buttons.forEach(function(button, index) {
         const discordButton = new ButtonBuilder()
         .setCustomId(button[0]) 
@@ -45,7 +44,7 @@ export async function sendMessage(channel, res, title, message, finColor, button
 
     // Logs
     console.log(
-      `Message sent successfully: ${sentMessage.id}`
+      `Message sent successfully.`
     );
 
     return res.json({

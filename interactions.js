@@ -22,36 +22,31 @@ export function interactions(notifType, buttonId, orderId, interaction, threadId
     // Get Carrier
     const carrier = interaction.user;
     var payload;
-    console.log(`interaction message: ${message}`);
-    console.log(`notifType: ${notifType}, buttonId: ${buttonId}`);
     
     const interactions = {
         "new" : {
             "accept" : async () => {
-                console.log("new 1");
                 // Send Interaction Notif
                 console.log(`Carrier ${carrier} is on the way`);
                 await interaction.editReply(`Errand ✅ Accepted by ${carrier}`);
 
-                console.log("new 2");
                 // Disable Button/s
                 // TODO: make limiter
                 await message.edit({
                 components: newButtons(message, [0,1]),
                 });
 
-                console.log("new 3");
                 // Create Private Thread with Carrier and EBs
                 const orderThread = await interaction.channel.threads.create({
                                     name: `Order ${orderId} - ${carrier.username}`,
-                                    type: ChannelType.PrivateThread,                                    });
+                                    type: ChannelType.PrivateThread,
+                });
                 await orderThread.send({
                     content: `Thank you ${carrier} for accepting the order! Fetching your customer order information...
                     
 _added <@&${'1567700287152717924'}>s to the thread._`,
                 });//var userMessage =
 
-                console.log("new 4");
                 // Send Info to Apps Script, Trigger Dispatch
                 payload = {
                     action: notifType,
@@ -87,8 +82,6 @@ _added <@&${'1567700287152717924'}>s to the thread._`,
                 });
             },
             "confirm" : async () => {
-                console.log(`dispatch confirm`);
-
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2,3]),
@@ -99,7 +92,6 @@ _added <@&${'1567700287152717924'}>s to the thread._`,
                     content: `Carrier Dispatch ✅ Confirmed by ${interaction.user}`
                 });
 
-                console.log(`order ID: ${orderId}`);
                 // Send Info to Apps Script, Trigger Errand Done
                 payload = {
                     action: notifType,
@@ -114,7 +106,6 @@ _added <@&${'1567700287152717924'}>s to the thread._`,
                 toSheets(payload);
             },
             "undo" : async () => {
-                console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [1,2]),
@@ -126,8 +117,7 @@ _added <@&${'1567700287152717924'}>s to the thread._`,
                 });
             },
             "surcharge" : async () => {
-                console.log("showing surcharge prompt");
-                console.log(`Order ID: ${orderId}`);
+                console.log("Showing Surcharge Prompt");
 
                 // Show Surcharge Modal
                 await surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
@@ -139,7 +129,6 @@ _added <@&${'1567700287152717924'}>s to the thread._`,
                 await interaction.editReply({
                     content: `❔ Please Confirm Errand Accomplishment, Carrier ${interaction.user}`
                 });
-                console.log(`done`);
 
                 // Disable Bought/Done Button
                 await message.edit({
@@ -147,8 +136,6 @@ _added <@&${'1567700287152717924'}>s to the thread._`,
                 });
             },
             "confirm" : async () => {
-                console.log(`done confirm`);
-
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2,3]),
@@ -183,7 +170,6 @@ Image Proof ${imageProof.name} and
 Order Price ${submittedPrice}PHP`);
             },
             "undo" : async () => {
-                console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [1,2]),
@@ -195,8 +181,7 @@ Order Price ${submittedPrice}PHP`);
                 });
             },
             "surcharge" : async () => {
-                console.log("showing surcharge prompt");
-                console.log(`Order ID: ${orderId}`);
+                console.log("Showing Surcharge Prompt");
 
                 // Show Surcharge Modal
                 await surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
@@ -208,7 +193,6 @@ Order Price ${submittedPrice}PHP`);
                 await interaction.editReply({
                     content: `❔ Please Confirm Arrival, Carrier ${interaction.user}`
                 });
-                console.log(`arrived`);
 
                 // Disable Bought/Done Button
                 await message.edit({
@@ -216,8 +200,6 @@ Order Price ${submittedPrice}PHP`);
                 });
             },
             "confirm" : async () => {
-                console.log(`confirm`);
-
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2,3]),
@@ -248,7 +230,6 @@ Order Price ${submittedPrice}PHP`);
                 await interaction.editReply(`Arrival ✅ Confirmed with: Image Proof ${imageProof.name}.`);
             },
             "undo" : async () => {
-                console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
                 components: newButtons(message, [1,2]),
@@ -260,7 +241,7 @@ Order Price ${submittedPrice}PHP`);
                 });
             },
             "surcharge" : async () => {
-                console.log("showing surcharge prompt");
+                console.log("Showing Surcharge Prompt");
                 
                 // Show Surcharge Modal
                 await surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
@@ -268,7 +249,7 @@ Order Price ${submittedPrice}PHP`);
         },
         "surcharge" : {
             "surcharge" : async () => {
-                console.log("showing surcharge prompt");
+                console.log("Showing Surcharge Prompt");
 
                 // Show Surcharge Modal
                 surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId);
@@ -278,7 +259,6 @@ Order Price ${submittedPrice}PHP`);
                 await interaction.editReply({
                     content: `✅ Surcharges have been finalized, Carrier ${interaction.user}.`
                 });
-                console.log(`surcharge`);
 
                 // Disable Surcharge Button
                 await message.edit({
@@ -300,7 +280,7 @@ Order Price ${submittedPrice}PHP`);
             },
         },
         "surchargeModal" : async () => {
-            console.log('in surcharge modal');
+            console.log('In Surcharge Modal');
             var selectedSurcharges = interaction.fields.getCheckboxGroup('surchargeCheckboxes');
             var surchargeContent = `${selectedSurcharges.join(', ')}`;
             var surchargeMessage = "Surcharges applied: " +
@@ -310,14 +290,12 @@ Order Price ${submittedPrice}PHP`);
             `${selectedSurcharges.includes('extremeHeat') ? 'Extreme Heat, ' : ''}`  +
             `${selectedSurcharges.includes('peakHours') ? 'Peak Hours, ' : ''}`  +
             `${selectedSurcharges.includes('examWeek') ? 'Exam Week' : ''}`;
-            console.log(surchargeMessage);
 
             try {
                 await interaction.editReply({
                     content: surchargeMessage
                 });
             } catch (e) { console.log(`error: ${e}`); }
-            console.log('after edit reply');
 
             payload = {
                     action: notifType,
@@ -339,7 +317,6 @@ Order Price ${submittedPrice}PHP`);
                 await interaction.editReply({
                     content: `❔ Please Confirm Delivery, Carrier ${interaction.user}`
                 });
-                console.log(`delivered`);
 
                 // Disable Bought/Done Button
                 await message.edit({
@@ -347,8 +324,6 @@ Order Price ${submittedPrice}PHP`);
                 });
             },
             "confirm" : async () => {
-                console.log(`confirm`);
-
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2]),
@@ -360,7 +335,6 @@ Order Price ${submittedPrice}PHP`);
             "imagePromptModal" : async () => {
                 const imageProof = interaction.fields.getUploadedFiles('imageInput').first();
 
-                console.log(`THREADID: ${threadId}`);
                 // Send Info to Apps Script (Image Proof), Trigger Customer Remarks
                 payload = {
                     action: notifType,
@@ -380,7 +354,6 @@ Order Price ${submittedPrice}PHP`);
                 await interaction.editReply(`Delivery ✅ Confirmed with: Image Proof ${imageProof.name}.`);
             },
             "undo" : async () => {
-                console.log(`undo`);
                 // Disable Button/s
                 await message.edit({
                 components: newButtons(message, [1,2]),
@@ -392,8 +365,7 @@ Order Price ${submittedPrice}PHP`);
                 });
             },
             "surcharge" : async () => {
-                console.log("showing surcharge prompt");
-                console.log(`Order ID: ${orderId}`);
+                console.log("Showing Surcharge Prompt");
 
                 // Show Surcharge Modal
                 await surchargePrompt(interaction, 'Select Applicable Surcharge:', orderId, notifType);
@@ -401,7 +373,7 @@ Order Price ${submittedPrice}PHP`);
         },
         "remarks" : {
             "remarks" : async () => {
-                console.log("showing remarks prompt");
+                console.log("Showing Remarks Prompt");
 
                 // Show Surcharge Modal
                 await remarksPrompt(interaction, orderId);
@@ -413,18 +385,16 @@ Order Price ${submittedPrice}PHP`);
             }
         },
         "remarksModal" : async () => {
-            console.log('in remarks modal');
+            console.log('In Remarks Modal');
             var customerRemarks = interaction.fields.getTextInputValue('customerRemarks');
             var carrierRemarks = interaction.fields.getTextInputValue('carrierRemarks');
             var remarksContent = `**Carrier to Customer Remarks:**   ${customerRemarks}
             
 **Customer to Carrier Remarks:**   ${carrierRemarks}`;
-            console.log(remarksContent);
 
             await interaction.editReply({
                 content: remarksContent
             });
-            console.log('after edit reply of remarksContent');
 
             payload = {
                     action: notifType,
@@ -443,8 +413,7 @@ Order Price ${submittedPrice}PHP`);
         },
         "postLog" : {
             "editInfo" : async () => {
-                console.log("showing post log information prompt");
-                console.log(`Order ID: ${orderId}`);
+                console.log("Showing Post-Log Information Prompt");
                 
                 // Show edit post log prompt
                 await editPostLogInfo(interaction, orderId);
@@ -454,8 +423,7 @@ Order Price ${submittedPrice}PHP`);
                 });
             },
             "editRemarks" : async () => {
-                console.log("showing post log remarks prompt");
-                console.log(`Order ID: ${orderId}`);
+                console.log("Showing Post-Log Remarks Prompt");
                 
                 // Show edit post log prompt
                 await editPostLogRemarks(interaction, orderId);
@@ -465,7 +433,6 @@ Order Price ${submittedPrice}PHP`);
                 });
             },
             "confirm" : async () => {
-                console.log(`done confirm`);
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2]),
@@ -478,9 +445,6 @@ Order Price ${submittedPrice}PHP`);
 
             },
             "sure" : async () => {
-                console.log(`done sure`);
-                console.log(message);
-                console.log(message.embeds[0]);
                 // Disable Button/s
                 await message.edit({
                     components: newButtons(message, [0,1,2,3,4]),
@@ -511,8 +475,7 @@ Order Price ${submittedPrice}PHP`);
                     embeds: [message.embeds[0]] || 'error',
                 });
             },
-            "undo" : async () => { 
-                console.log(`undo post log`);
+            "undo" : async () => {
                 // Disable Button/s
                 await message.edit({
                 components: newButtons(message, [3,4]),
@@ -525,7 +488,7 @@ Order Price ${submittedPrice}PHP`);
             },
         },
         "postLogInfoModal" : async () => {
-            console.log('in info post log modal');
+            console.log('In Info Post-Log Modal');
             console.log(notifType);
 
             interaction.editReply({
@@ -540,11 +503,11 @@ Order Price ${submittedPrice}PHP`);
             const timeArri = getVal('timeArrived');
             const timeDel = getVal('timeDelivered');
 
-            console.log(`Inputted Delivery Location: ${delivLoc}`);
-            console.log(`Inputted Time Dispatched: ${timeDis}`);
-            console.log(`Inputted Time Bought: ${timeBought}`);
-            console.log(`Inputted Time Arrived: ${timeArri}`);
-            console.log(`Inputted Time Delivered: ${timeDel}`);
+            console.log(`Inputted Delivery Location`);
+            console.log(`Inputted Time Dispatched`);
+            console.log(`Inputted Time Bought`);
+            console.log(`Inputted Time Arrived`);
+            console.log(`Inputted Time Delivered`);
 
             // Send Info to Apps Script, Trigger Errand Done
                 payload = {
@@ -566,8 +529,7 @@ Order Price ${submittedPrice}PHP`);
                 toSheets(payload);
         },
         "postLogRemarksModal" : async () => {
-            console.log('in remarks post log modal');
-            console.log(notifType);
+            console.log('In Remarks Post-Log Modal');
 
             interaction.editReply({
                 content: "Updating and fetching your new Post Delivery Log..."
@@ -578,8 +540,8 @@ Order Price ${submittedPrice}PHP`);
             const cusRemarks = getVal('cusRemarks');
             const carRemarks = getVal('carRemarks');
 
-            console.log(`Inputted Customer Remarks: ${cusRemarks}`);
-            console.log(`Inputted Carrier Remarks: ${carRemarks}`);
+            console.log(`Inputted Customer Remarks`);
+            console.log(`Inputted Carrier Remarks`);
             
             // Send Info to Apps Script, Trigger Errand Done
                 payload = {
@@ -607,6 +569,5 @@ Order Price ${submittedPrice}PHP`);
         throw new Error(`No interaction handler for ${notifType}/${buttonId}`);
     }
 
-    console.log(handler);
     return handler;
 }

@@ -71,7 +71,7 @@ app.post("/trigger", async (req, res) => {
     // Assign Valid Carrier Usernames
     if (notifType === "newOrder") {
       carrierUns = info.validUns;
-      console.log(`Communicated Carrier UNs: ${carrierUns}`);
+      console.log(`Communicated Carrier UNs: ${carrierUns.length}`);
     }
 
     // Handle Channel ID Existence
@@ -81,7 +81,6 @@ app.post("/trigger", async (req, res) => {
         error: "channelId is required",
       });
     }
-    console.log("chnl check");
 
     console.log(client.isReady());
     let channel = await client.channels.fetch(channelId);
@@ -93,9 +92,7 @@ app.post("/trigger", async (req, res) => {
         error: "Invalid Discord channel",
       });
     }
-    console.log("chnl check 2");
 
-    console.log(`erm + ${orderId}`);
 ////// SEND PROMPT - based on trigger notif type
     var action = commands(channel, res, orderId, notifType, info);
     action();
@@ -128,8 +125,6 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
     const notifType = custId[1];
     const buttonId = custId.length == 4 ? custId[2] : "none";
     const threadId = custId.length == 4 ? custId[3] : custId[2];
-    console.log(`THREADID: ${threadId}`);
-    console.log(interaction.customId, orderId, notifType, buttonId, threadId);
 
     // Validate Username
     if (notifType == "new" && !carrierUns.includes(interaction.user.username)) {
@@ -163,17 +158,13 @@ client.on(Events.InteractionCreate, async (interaction) => {//"interactionCreate
       (notifType === "delivered" && buttonId === "confirm") ||
       (buttonId === "editInfo" || buttonId === "editRemarks") ||
       (buttonId === "surcharge" || buttonId === "remarks");
-      console.log(opensModal);
     if (!opensModal) {
       await interaction.deferReply();
-      console.log("--");
     }
 
 ////// ACT ON BUTTON CLICK - based on notif type
-    console.log(`${notifType}+${buttonId}+${orderId}`);
     const interact = interactions(notifType, buttonId, orderId, interaction, threadId, client);
     await interact();
-    console.log(`${notifType}+${buttonId}+${orderId}`);
   } catch (error) {
     console.error("Button interaction error:", error);
 
